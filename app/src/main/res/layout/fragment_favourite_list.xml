@@ -1,0 +1,34 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                                       xmlns:tools="http://schemas.android.com/tools"
+                                       android:id="@+id/scrollViewListFavourites"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="match_parent"
+                                       android:layout_marginBottom="55dp"
+                                       tools:context=".ui.fragments.FavouriteListFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewFavourite"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
+
+        <TextView
+            android:id="@+id/noFoundText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            android:text="@string/empty_list"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>
