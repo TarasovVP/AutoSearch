@@ -4,12 +4,14 @@
     <color name="colorPrimaryDark">#740002</color>
     <color name="colorAccent">#008ecc</color>
 
-
+    <color name="colorError">#800000</color>
+    <color name="colorSuccess">#008000</color>
+    <color name="colorInfo">#7F8182</color>
 
     <color name="colorDivider">#40000000</color>
     <color name="item_car_head">#ffc9cc</color>
     <color name="head_item_car_text">#CC1400</color>
-    <color name="seller">#AFD8EB</color>
     <color name="searchText">#2B2D2D</color>
     <color name="head_car_inner_color">#ffffff</color>
+    <color name="offLine">#767777</color>
 </resources>

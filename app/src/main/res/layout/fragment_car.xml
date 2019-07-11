@@ -1,265 +1,352 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.fragments.CarFragment">
-<RelativeLayout
-    android:id="@+id/carPhotoContainer"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabDots"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabBackground="@drawable/tab_selector"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"/>
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/avtopoisk.appbar"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@android:color/background_light"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <ImageButton
-            android:id="@+id/favouriteCar"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_alignBottom="@+id/carPhotoContainer"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="136dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="1dp"
-            android:background="@drawable/favourite"
-            android:clickable="true"
-            android:focusable="true"
-            tools:ignore="ContentDescription,NotSibling"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"/>
-</RelativeLayout>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/item_car_head"
-        android:padding="1dp">
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/avtopoisk.collapsing"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleMarginStart="48dp"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+
+            <RelativeLayout
+                    android:id="@+id/carPhotoContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"/>
+
+                <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabDots"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:tabBackground="@drawable/tab_selector"
+                        app:tabGravity="center"
+                        app:tabIndicatorHeight="0dp"/>
+
+                <ImageButton
+                        android:id="@+id/buttonBackCar"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_alignTop="@+id/carPhotoContainer"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/arrowleft"
+                        android:clickable="true"
+                        android:focusable="true"
+                        tools:ignore="ContentDescription,NotSibling"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="15dp"/>
+
+                <ImageButton
+                        android:id="@+id/zoom_out"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_alignBottom="@+id/carPhotoContainer"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="121dp"
+                        android:layout_marginBottom="1dp"
+                        android:background="@drawable/zoom_out"
+                        android:clickable="true"
+                        android:focusable="true"
+                        tools:ignore="ContentDescription,NotSibling"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="15dp"/>
+
+                <ImageButton
+                        android:id="@+id/favouriteCar"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_alignBottom="@+id/carPhotoContainer"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="121dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="1dp"
+                        android:background="@drawable/favourite"
+                        android:clickable="true"
+                        android:focusable="true"
+                        tools:ignore="ContentDescription,NotSibling"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"/>
+            </RelativeLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/avtopoisk.toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="-12dp"
+            android:background="@color/item_car_head"
+            android:padding="1dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_anchor="@id/avtopoisk.appbar"
+            app:layout_anchorGravity="bottom"
+            app:layout_collapseMode="pin"
+            android:layout_marginLeft="-12dp">
+
+
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
+                android:layout_marginEnd="2dp"
                 android:background="@color/head_car_inner_color"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:layout_marginRight="2dp">
 
-                <TextView
-                        android:id="@+id/yearCar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:textAlignment="textStart"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginLeft="5dp"
-                        android:gravity="start"/>
+            <TextView
+                    android:id="@+id/yearCar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+                    android:textAlignment="textStart"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="15sp"
+                    android:textStyle="bold" android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start"/>
 
-                <TextView
+            <TextView
                     android:id="@+id/nameCar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:textAlignment="center"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+            <TextView
+                    android:id="@+id/priceCar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="end"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/head_item_car_text"
+                    android:textSize="15sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    tools:ignore="RelativeOverlap"/>
+        </RelativeLayout>
 
-                <TextView
-                        android:id="@+id/priceCar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:gravity="end"
-                        android:textAlignment="textEnd"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="@color/head_item_car_text"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginRight="5dp"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="55dp">
-        <LinearLayout
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_gravity="fill_vertical"
+            android:layout_marginBottom="60dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <Button
+                        android:id="@+id/callButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_button"
+                        android:drawableStart="@drawable/phone"
+                        android:paddingStart="12dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="2dp"
+                        android:text="@string/phone_to_seller"
+                        android:textAlignment="center"
+                        android:textColor="@color/searchText"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="12dp"
+                        android:drawableLeft="@drawable/phone"
+                        tools:ignore="ButtonStyle"/>
+
+                <Button
+                        android:id="@+id/writeButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_button"
+                        android:drawableStart="@drawable/message"
+                        android:paddingStart="12dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="2dp"
+                        android:text="@string/write_to_seller"
+                        android:textAlignment="center"
+                        android:textColor="@color/searchText"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="30dp"
+                        android:drawableLeft="@drawable/message"
+                        tools:ignore="ButtonStyle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="10dp">
+
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="15dp">
+
+                    <TextView
+                            android:id="@+id/citySeller"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="14sp"/>
+
+                    <TextView
+                            android:id="@+id/engineCar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="14sp"/>
+
+                    <TextView
+                            android:id="@+id/mileageCar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="14sp"/>
+
+                    <TextView
+                            android:id="@+id/colorCar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="14sp"/>
+
+                </LinearLayout>
 
                 <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp">
-
-                    <TextView
-                        android:id="@+id/engineCar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/mileageCar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/colorCar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/gearboxCar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/driveCar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/bodyCar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="2dp"
-                android:background="@android:color/darker_gray"/>
-            <WebView
-                android:id="@+id/webCar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:ignore="WebViewLayout" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/seller"
-                android:orientation="vertical">
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                        android:orientation="vertical">
 
                     <TextView
                             android:id="@+id/dateCar"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginStart="38dp"
-                            android:gravity="end"
+                            android:gravity="start"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textSize="12sp" android:layout_alignParentLeft="true"
-                            android:layout_marginLeft="38dp"/>
+                            android:textSize="14sp"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center_horizontal"
-                        android:text="@string/call_seller"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="12sp" />
+                            android:id="@+id/gearboxCar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="14sp"/>
 
                     <TextView
-                            android:id="@+id/citySeller"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/driveCar"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="49dp"
+                            android:gravity="start"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textSize="12sp" android:layout_alignParentRight="true"
-                            android:layout_marginRight="49dp" tools:ignore="RelativeOverlap"/>
+                            android:textSize="14sp"/>
 
-
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
-                    <ImageView
-                            android:id="@+id/phoneSeller"
-                            android:layout_width="wrap_content"
+                    <TextView
+                            android:id="@+id/bodyCar"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_margin="5dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/placeholder"
-                            tools:ignore="ContentDescription"/>
+                            android:gravity="start"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="14sp"/>
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@android:color/darker_gray"/>
+
+            <TextView
+                    android:id="@+id/textCar"
+                    android:lineSpacingExtra="3dp"
+                    android:textSize="16sp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/searchText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="10dp"/>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@android:color/darker_gray"/>
+
+
         </LinearLayout>
 
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
-</LinearLayout>
-
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

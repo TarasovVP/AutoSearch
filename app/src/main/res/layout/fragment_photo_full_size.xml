@@ -1,0 +1,102 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:orientation="vertical"
+                tools:context="com.vptarasov.autosearch.ui.fragments.PhotoFullSizeFragment">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/item_car_head"
+            android:layout_marginTop="5dp"
+            tools:ignore="UnusedAttribute">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginTop=".5dp"
+                android:layout_gravity="center"
+                android:background="@color/head_car_inner_color"
+                android:padding="5dp">
+
+            <TextView
+                    android:id="@+id/yearCar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+                    android:textAlignment="textStart"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:gravity="start"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="5dp"/>
+
+            <TextView
+                    android:id="@+id/nameCar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+            <TextView
+                    android:id="@+id/priceCar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="end"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/head_item_car_text"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    tools:ignore="RelativeOverlap"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    >
+
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pagerFullSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:layout_marginBottom="0dp"/>
+    </RelativeLayout>
+
+    <ImageButton
+            android:id="@+id/buttonBackFullPhoto"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="55dp"
+            android:background="@drawable/arrowleft"
+            android:clickable="true"
+            android:focusable="true"
+            tools:ignore="ContentDescription,NotSibling"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"/>
+
+
+</RelativeLayout>

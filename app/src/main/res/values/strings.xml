@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Автопоиск</string>
-    <string name="brand">Марка</string>
     <string name="select">Выбрать</string>
     <string name="mark">Марка</string>
     <string name="region">Регион</string>
@@ -36,8 +35,15 @@
     <string name="reset">Сбросить</string>
     <string name="No">Нет</string>
     <string name="Yes">Да</string>
+    <string name="no_internet">Нет интернет соединения</string>
     <string name="want_to_exit_app">Вы хотите выйти из приложения?</string>
     <string name="show_car">Show car</string>
-    <string name="call_seller">Связаться с продавцом:</string>
-    <string name="price_dollar">$</string>
+    <string name="information">Информация</string>
+    <string name="success">Успешно</string>
+    <string name="error">Ошибка</string>
+    <string name="write_to_seller">Написать</string>
+    <string name="phone_to_seller">Позвонить</string>
+    <string name="model">Модель</string>
+    <string name="city">Город</string>
+    <string name="usd">USD</string>
 </resources>

@@ -1,57 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:orientation="vertical">
-
-        <LinearLayout
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="1dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
 
-                <LinearLayout
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="vertical">
+
+
+            <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="50dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="1dp"
+                    android:orientation="vertical"
+                    android:layout_marginRight="5dp"
+                    tools:ignore="UselessParent">
 
-                    <TextView
+                <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/mark"
-                        android:textColor="@color/searchText"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/region"
-                        android:textColor="@color/searchText"
-                        android:textStyle="bold" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:text="@string/mark"
+                            android:textColor="@color/searchText"
+                            android:textStyle="bold" />
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/model"
+                            android:textColor="@color/searchText"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="5dp"/>
                 </LinearLayout>
 
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
 
                     <LinearLayout
                             android:layout_width="0dp"
@@ -62,14 +74,13 @@
                             android:layout_marginRight="@dimen/padding_small">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
                         <Spinner
-                            android:id="@+id/searchMark"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/brand" />
+                                android:id="@+id/searchMark"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
@@ -82,38 +93,135 @@
                             android:layout_marginLeft="@dimen/padding_small">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
                         <Spinner
-                            android:id="@+id/searchRegion"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/select" />
-
+                                android:id="@+id/searchModel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
 
                     </LinearLayout>
                 </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <include layout="@layout/divider" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="1dp"
-            android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="vertical"
+                android:layout_marginRight="5dp">
+
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="1dp"
+                    android:orientation="vertical"
+                    tools:ignore="UselessParent">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:text="@string/region"
+                            android:textColor="@color/searchText"
+                            android:textStyle="bold" />
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/city"
+                            android:textColor="@color/searchText"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="5dp"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/padding_small"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:layout_marginRight="@dimen/padding_small">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        <Spinner
+                                android:id="@+id/searchRegion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/padding_small"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="@dimen/padding_small">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        <Spinner
+                                android:id="@+id/searchCity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <include layout="@layout/divider" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="@string/year"
-                android:textColor="@color/searchText"
-                android:textStyle="bold" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/year"
+                    android:textColor="@color/searchText"
+                    android:textStyle="bold" />
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -130,15 +238,15 @@
                         android:layout_marginRight="@dimen/padding_small">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/from"
-                        android:textColor="@color/searchText" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/from"
+                            android:textColor="@color/searchText" />
 
                     <Spinner
-                        android:id="@+id/searchYearFrom"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                            android:id="@+id/searchYearFrom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -151,16 +259,16 @@
                         android:layout_marginLeft="@dimen/padding_small">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/to"
-                        android:textColor="@color/searchText" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/to"
+                            android:textColor="@color/searchText" />
 
                     <Spinner
-                        android:id="@+id/searchYearTo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/mark" />
+                            android:id="@+id/searchYearTo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mark" />
 
 
                 </LinearLayout>
@@ -171,20 +279,20 @@
         <include layout="@layout/divider" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="1dp"
-            android:orientation="vertical">
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/price"
-                android:textColor="@color/searchText"
-                android:textStyle="bold" />
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/price"
+                    android:textColor="@color/searchText"
+                    android:textStyle="bold" />
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -202,13 +310,13 @@
                         android:layout_marginRight="@dimen/padding_small">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.5"
-                        android:text="@string/from"
-                        android:textColor="@color/searchText"
-                        tools:ignore="NestedWeights" />
+                            android:layout_width="0dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="0.5"
+                            android:text="@string/from"
+                            android:textColor="@color/searchText"
+                            tools:ignore="NestedWeights" />
 
                     <EditText
                             android:id="@+id/searchPriceFrom"
@@ -216,9 +324,9 @@
                             android:layout_height="45dp"
                             android:layout_gravity="bottom"
                             android:layout_weight="2"
+                            android:autofillHints="@string/usd"
                             android:inputType="numberDecimal"
-                            android:autofillHints="@string/price_dollar"
-                            tools:ignore="LabelFor,UnusedAttribute"/>
+                            tools:ignore="LabelFor,UnusedAttribute" />
 
                 </LinearLayout>
 
@@ -231,13 +339,13 @@
                         android:layout_marginLeft="@dimen/padding_small">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.5"
-                        android:text="@string/to"
-                        android:textColor="@color/searchText"
-                        tools:ignore="NestedWeights" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="0.5"
+                            android:text="@string/to"
+                            android:textColor="@color/searchText"
+                            tools:ignore="NestedWeights" />
 
                     <EditText
                             android:id="@+id/searchPriceTo"
@@ -245,9 +353,9 @@
                             android:layout_height="45dp"
                             android:layout_gravity="bottom"
                             android:layout_weight="2"
+                            android:autofillHints="@string/usd"
                             android:inputType="numberDecimal"
-                            android:autofillHints="@string/price_dollar"
-                            tools:ignore="LabelFor,UnusedAttribute"/>
+                            tools:ignore="LabelFor,UnusedAttribute" />
 
                 </LinearLayout>
 
@@ -258,40 +366,40 @@
         <include layout="@layout/divider" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="1dp"
-            android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/kpp"
-                android:textColor="@color/searchText"
-                android:textStyle="bold" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/kpp"
+                    android:textColor="@color/searchText"
+                    android:textStyle="bold" />
 
             <CheckBox
-                android:id="@+id/searchGearboxMech"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/mechanic"
-                android:textColor="@color/searchText"
-                android:theme="@style/checkBoxStyle" />
+                    android:id="@+id/searchGearboxMech"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/mechanic"
+                    android:textColor="@color/searchText"
+                    android:theme="@style/checkBoxStyle" />
 
             <CheckBox
-                android:id="@+id/searchGearboxAutom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/autiomatic"
-                android:textColor="@color/searchText"
-                android:theme="@style/checkBoxStyle" />
+                    android:id="@+id/searchGearboxAutom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/autiomatic"
+                    android:textColor="@color/searchText"
+                    android:theme="@style/checkBoxStyle" />
 
         </LinearLayout>
 
@@ -315,18 +423,18 @@
                     android:layout_marginRight="@dimen/padding_small">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/body"
-                    android:textColor="@color/searchText"
-                    android:textStyle="bold" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/body"
+                        android:textColor="@color/searchText"
+                        android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/searchBody"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="end"
-                    android:text="@string/select" />
+                        android:id="@+id/searchBody"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="end"
+                        android:text="@string/select" />
             </LinearLayout>
 
             <LinearLayout
@@ -338,101 +446,101 @@
                     android:layout_marginLeft="@dimen/padding_small">
 
                 <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/unit_drive"
+                        android:textColor="@color/searchText"
+                        android:textStyle="bold" />
+
+                <Spinner
+                        android:id="@+id/searchEngineUnit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="end"
+                        android:text="@string/select" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <include layout="@layout/divider" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="3dp"
+                android:orientation="vertical">
+
+            <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/unit_drive"
+                    android:text="@string/fuel"
                     android:textColor="@color/searchText"
                     android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/searchEngineUnit"
+            <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="end"
-                    android:text="@string/select" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <include layout="@layout/divider" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="3dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/fuel"
-                android:textColor="@color/searchText"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    android:layout_height="wrap_content">
 
                 <CheckBox
-                    android:id="@+id/searchPetrol"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/petrol"
-                    android:textColor="@color/searchText"
-                    android:theme="@style/checkBoxStyle" />
+                        android:id="@+id/searchPetrol"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/petrol"
+                        android:textColor="@color/searchText"
+                        android:theme="@style/checkBoxStyle" />
 
                 <CheckBox
-                    android:id="@+id/searchDiesel"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/diesel"
-                    android:textColor="@color/searchText"
-                    android:theme="@style/checkBoxStyle" />
+                        android:id="@+id/searchDiesel"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/diesel"
+                        android:textColor="@color/searchText"
+                        android:theme="@style/checkBoxStyle" />
 
                 <CheckBox
-                    android:id="@+id/searchGasPetrol"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/gas_petrol"
-                    android:textColor="@color/searchText"
-                    android:theme="@style/checkBoxStyle" />
+                        android:id="@+id/searchGasPetrol"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/gas_petrol"
+                        android:textColor="@color/searchText"
+                        android:theme="@style/checkBoxStyle" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <CheckBox
-                    android:id="@+id/searchElectro"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/electro"
-                    android:textColor="@color/searchText"
-                    android:theme="@style/checkBoxStyle" />
+                        android:id="@+id/searchElectro"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/electro"
+                        android:textColor="@color/searchText"
+                        android:theme="@style/checkBoxStyle" />
 
                 <CheckBox
-                    android:id="@+id/searchGas"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/gas"
-                    android:textColor="@color/searchText"
-                    android:theme="@style/checkBoxStyle" />
+                        android:id="@+id/searchGas"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/gas"
+                        android:textColor="@color/searchText"
+                        android:theme="@style/checkBoxStyle" />
 
                 <CheckBox
-                    android:id="@+id/searchPetrolElectro"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/petrol_electro"
-                    android:textColor="@color/searchText"
-                    android:theme="@style/checkBoxStyle" />
+                        android:id="@+id/searchPetrolElectro"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/petrol_electro"
+                        android:textColor="@color/searchText"
+                        android:theme="@style/checkBoxStyle" />
             </LinearLayout>
 
         </LinearLayout>
@@ -440,21 +548,21 @@
         <include layout="@layout/divider" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="1dp"
-            android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="@string/engine"
-                android:textColor="@color/searchText"
-                android:textStyle="bold" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/engine"
+                    android:textColor="@color/searchText"
+                    android:textStyle="bold" />
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -470,16 +578,16 @@
                         android:layout_marginRight="@dimen/padding_small">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/from"
-                        android:textColor="@color/searchText" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/from"
+                            android:textColor="@color/searchText" />
 
                     <Spinner
-                        android:id="@+id/searchEngineFrom"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/select" />
+                            android:id="@+id/searchEngineFrom"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/select" />
 
                 </LinearLayout>
 
@@ -492,16 +600,16 @@
                         android:layout_marginLeft="@dimen/padding_small">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/to"
-                        android:textColor="@color/searchText" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/to"
+                            android:textColor="@color/searchText" />
 
                     <Spinner
-                        android:id="@+id/searchEngineTo"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/select" />
+                            android:id="@+id/searchEngineTo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/select" />
 
                 </LinearLayout>
 
@@ -513,38 +621,38 @@
         <include layout="@layout/divider" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/color"
-                android:textColor="@color/searchText"
-                android:textStyle="bold" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/color"
+                    android:textColor="@color/searchText"
+                    android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/searchColor"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:gravity="end"
-                android:text="@string/select" />
+                    android:id="@+id/searchColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:text="@string/select" />
         </LinearLayout>
 
 
         <include layout="@layout/divider" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <Button
                     android:id="@+id/resetButton"
@@ -586,9 +694,6 @@
 
         </RelativeLayout>
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="60dp" />
 
     </LinearLayout>
 </ScrollView>
