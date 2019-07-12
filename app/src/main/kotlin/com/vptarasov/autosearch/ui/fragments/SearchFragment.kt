@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.api.Api
 import com.vptarasov.autosearch.model.City
@@ -18,7 +17,6 @@ import com.vptarasov.autosearch.parser.HTMLParser
 import com.vptarasov.autosearch.util.FragmentUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_search_main.*
 import kotlinx.android.synthetic.main.fragment_search_main.view.*
 import java.util.*
 
@@ -30,7 +28,9 @@ class SearchFragment : BaseFragment() {
     private var city: City? = null
 
     private var searchMark: Spinner? = null
+    private var searchModel: Spinner? = null
     private var searchRegion: Spinner? = null
+    private var searchCity: Spinner? = null
     private var searchYearFrom: Spinner? = null
     private var searchYearTo: Spinner? = null
     private var searchBody: Spinner? = null
@@ -52,11 +52,8 @@ class SearchFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflateWithLoadingIndicator(R.layout.fragment_search_main, container)
-        val searchModel: Spinner? = view.searchModel
-        val searchCity: Spinner? = view.searchCity
-        val applyButton: Button? = view.applyButton
-        val resetButton: Button? = view.resetButton
-
+        searchModel = view.searchModel
+        searchCity = view.searchCity
         searchMark = view.searchMark
         searchRegion = view.searchRegion
         searchYearFrom = view.searchYearFrom
@@ -77,12 +74,15 @@ class SearchFragment : BaseFragment() {
         searchGas = view.searchGas
         searchPetrolElectro = view.searchPetrolElectro
 
+        val applyButton: Button? = view.applyButton
+        val resetButton: Button? = view.resetButton
+
         val bundle = arguments
         searchData = bundle?.getSerializable("searchData") as SearchData
         setDataToSpinner(searchData)
 
         searchMark?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
 
                 val item = parent.getItemAtPosition(position)
                 val key = searchData?.mark?.let { getKeyFromValue(it, item).toString() }
@@ -99,7 +99,7 @@ class SearchFragment : BaseFragment() {
             }
         }
         searchRegion?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
 
                 val item = parent.getItemAtPosition(position)
                 val key = searchData?.region?.let { getKeyFromValue(it, item).toString() }
@@ -128,11 +128,8 @@ class SearchFragment : BaseFragment() {
             bundle1.putSerializable("queryDetails", queryDetails)
             val carsListFragment = CarsListFragment()
             carsListFragment.arguments = bundle1
-            FragmentUtil.replaceFragment(
-                (Objects.requireNonNull<Context>(context) as AppCompatActivity).supportFragmentManager,
-                carsListFragment,
-                false
-            )
+            fragmentManager?.let { FragmentUtil.replaceFragment(it, carsListFragment, true) }
+
 
         }
 
@@ -170,25 +167,25 @@ class SearchFragment : BaseFragment() {
         queryDetails?.body = (
                 if (searchData != null) getKeyFromValue(
                     searchData?.body,
-                    if (searchCity != null) searchCity?.selectedItem.toString() else ""
+                    if (searchBody != null) searchBody?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.color = (
                 if (searchData != null) getKeyFromValue(
                     searchData?.color,
-                    if (searchCity != null) searchCity?.selectedItem.toString() else ""
+                    if (searchColor != null) searchColor?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.engineUnit = (
                 if (searchData != null) getKeyFromValue(
                     searchData?.drive,
-                    if (searchCity != null) searchCity?.selectedItem.toString() else ""
+                    if (searchEngineUnit != null) searchEngineUnit?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.mark = (
                 if (searchData != null) getKeyFromValue(
                     searchData?.mark,
-                    if (searchCity != null) searchCity?.selectedItem.toString() else ""
+                    if (searchMark != null) searchMark?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
 
@@ -201,7 +198,7 @@ class SearchFragment : BaseFragment() {
         queryDetails?.region = (
                 if (searchData != null) getKeyFromValue(
                     searchData?.region,
-                    if (searchCity != null) searchCity?.selectedItem.toString() else ""
+                    if (searchRegion != null) searchRegion?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.city = (
@@ -213,25 +210,25 @@ class SearchFragment : BaseFragment() {
         queryDetails?.engineFrom = (
                 if (city != null) getKeyFromValue(
                     searchData?.engine,
-                    if (searchCity != null) searchCity!!.selectedItem.toString() else ""
+                    if (searchEngineFrom != null) searchEngineFrom!!.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.engineTo = (
                 if (city != null) getKeyFromValue(
                     searchData?.engine,
-                    if (searchCity != null) searchCity!!.selectedItem.toString() else ""
+                    if (searchEngineTo != null) searchEngineTo!!.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.yearFrom = (
                 if (city != null) getKeyFromValue(
                     searchData?.year,
-                    if (searchCity != null) searchCity!!.selectedItem.toString() else ""
+                    if (searchYearFrom != null) searchYearFrom!!.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.yearTo = (
                 if (city != null) getKeyFromValue(
                     searchData?.year,
-                    if (searchCity != null) searchCity!!.selectedItem.toString() else ""
+                    if (searchYearTo != null) searchYearTo!!.selectedItem.toString() else ""
                 ).toString() else ""
                 )
 
