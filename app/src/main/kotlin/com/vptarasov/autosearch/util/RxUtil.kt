@@ -9,19 +9,8 @@ import java.util.concurrent.TimeUnit
 
 @SuppressLint("CheckResult")
 object RxUtil {
-    fun <S> mainThreadConsumer(`object`: S, consumer: Consumer<S>) {
-        mainThreadConsumer(`object`, consumer, null)
-    }
 
-    private fun <S> mainThreadConsumer(`object`: S, consumer: Consumer<in S>, errorConsumer: Consumer<Throwable>?) {
-        Observable
-            .just(`object`)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(consumer, errorConsumer ?: Consumer { it.printStackTrace() })
-    }
-
-    fun delayedConsumer(delay: Long, consumer: ScreenAnimations) {
+    fun delayedConsumer(delay: Long, consumer: Consumer<Long>) {
         delayedConsumer(delay, consumer, null)
     }
 
@@ -32,26 +21,7 @@ object RxUtil {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(consumer, errorConsumer ?: Consumer { it.printStackTrace() })
     }
-
-    private fun <S> networkConsumer(
-        observable: Observable<S>,
-        consumer: Consumer<S>,
-        errorConsumer: Consumer<Throwable>?
-    ) {
-        observable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(consumer, errorConsumer ?: Consumer { it.printStackTrace() })
-    }
-
-    fun <S> networkConsumer(observable: Observable<S>, consumer: Consumer<S>) {
-        networkConsumer(observable, consumer, null)
-    }
-
-    fun delayedConsumer(delay: Long, consumer: () -> Unit) {
-
-
-    }
-
-
 }
+
+
+

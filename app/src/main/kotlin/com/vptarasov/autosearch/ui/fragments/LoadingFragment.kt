@@ -20,7 +20,9 @@ import com.vptarasov.autosearch.util.RxUtil
 import com.vptarasov.autosearch.util.ScreenAnimation
 import com.vptarasov.autosearch.util.ScreenAnimations
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_loading.view.*
 
 class LoadingFragment : BaseFragment(), Animated {
 
@@ -33,6 +35,8 @@ class LoadingFragment : BaseFragment(), Animated {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflateWithLoadingIndicator(R.layout.fragment_loading, container)
+        progressTyre = view.progressTyre
+        logo = view.logo
         animateLoadingView()
         setAnimationFinishInterval(INTERVAL_ANIM_FINISH)
         loadData()
@@ -51,7 +55,8 @@ class LoadingFragment : BaseFragment(), Animated {
         rotation.fillAfter = true
         ScreenAnimations.rotate(progressTyre)
 
-        RxUtil.delayedConsumer(INTERVAL_ANIM_LOADING.toLong()) {proceed()}
+        RxUtil.delayedConsumer(INTERVAL_ANIM_LOADING.toLong(),
+            Consumer { this@LoadingFragment.proceed() })
 
     }
 

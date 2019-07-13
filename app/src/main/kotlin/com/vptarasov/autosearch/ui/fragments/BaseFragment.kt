@@ -46,10 +46,6 @@ open class BaseFragment : Fragment() {
         return layout
     }
 
-    protected fun inflateWithLoadingIndicatorAndAnimate(resId: Int, parent: ViewGroup): View {
-        return animateLayout(inflateWithLoadingIndicator(resId, parent))
-    }
-
     protected fun inflateWithLoadingIndicator(resId: Int, parent: ViewGroup?): View {
         swipeRefreshLayout = SwipeRefreshLayout(Objects.requireNonNull<FragmentActivity>(activity))
         swipeRefreshLayout?.layoutParams =
@@ -84,45 +80,6 @@ open class BaseFragment : Fragment() {
         showErrorMessage(getString(resId))
     }
 
-    private fun showInfoMessage(text: String) {
-        if (isAttached) {
-            return
-        }
-        Alerter.create(Objects.requireNonNull<FragmentActivity>(activity))
-            .setIconColorFilter(ContextCompat.getColor(activity!!, android.R.color.white))
-            .setBackgroundColorRes(R.color.colorInfo)
-            .setIcon(R.drawable.ic_close_circle)
-            .setTitle(R.string.information)
-            .setText(text)
-            .show()
-    }
-
-    protected fun showInfoMessage(resId: Int) {
-        if (isAttached) {
-            return
-        }
-        showInfoMessage(getString(resId))
-    }
-
-    private fun showSuccessMessage(text: String) {
-        if (isAttached) {
-            return
-        }
-        Alerter.create(Objects.requireNonNull<FragmentActivity>(activity))
-            .setIconColorFilter(ContextCompat.getColor(activity!!, android.R.color.white))
-            .setBackgroundColorRes(R.color.colorSuccess)
-            .setIcon(R.drawable.ic_check_circle)
-            .setTitle(R.string.success)
-            .setText(text)
-            .show()
-    }
-
-    protected fun showSuccessMessage(resId: Int) {
-        if (isAttached) {
-            return
-        }
-        showSuccessMessage(getString(resId))
-    }
 
     protected fun setAnimationFinishInterval(interval: Int) {
         this.animationFinishInterval = interval
@@ -138,7 +95,7 @@ open class BaseFragment : Fragment() {
     }
 
     companion object {
-        lateinit var screenAnimations: ScreenAnimations
+         var screenAnimations: ScreenAnimations = ScreenAnimations()
     }
 
 }

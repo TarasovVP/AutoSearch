@@ -192,7 +192,7 @@ class SearchFragment : BaseFragment() {
         queryDetails?.model = (
                 if (model != null) getKeyFromValue(
                     model?.model,
-                    if (searchModel != null) searchModel!!.selectedItem.toString() else ""
+                    if (searchModel != null) searchModel?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.region = (
@@ -204,31 +204,31 @@ class SearchFragment : BaseFragment() {
         queryDetails?.city = (
                 if (city != null) getKeyFromValue(
                     city?.city,
-                    if (searchCity != null) searchCity!!.selectedItem.toString() else ""
+                    if (searchCity != null) searchCity?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.engineFrom = (
                 if (city != null) getKeyFromValue(
                     searchData?.engine,
-                    if (searchEngineFrom != null) searchEngineFrom!!.selectedItem.toString() else ""
+                    if (searchEngineFrom != null) searchEngineFrom?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.engineTo = (
                 if (city != null) getKeyFromValue(
                     searchData?.engine,
-                    if (searchEngineTo != null) searchEngineTo!!.selectedItem.toString() else ""
+                    if (searchEngineTo != null) searchEngineTo?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.yearFrom = (
                 if (city != null) getKeyFromValue(
                     searchData?.year,
-                    if (searchYearFrom != null) searchYearFrom!!.selectedItem.toString() else ""
+                    if (searchYearFrom != null) searchYearFrom?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
         queryDetails?.yearTo = (
                 if (city != null) getKeyFromValue(
                     searchData?.year,
-                    if (searchYearTo != null) searchYearTo!!.selectedItem.toString() else ""
+                    if (searchYearTo != null) searchYearTo?.selectedItem.toString() else ""
                 ).toString() else ""
                 )
 
