@@ -1,6 +1,7 @@
 package com.vptarasov.autosearch.api
 
 import com.google.gson.Gson
+import com.vptarasov.autosearch.util.Constants
 import io.reactivex.Observable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -79,10 +80,6 @@ interface Api {
     }
 
     companion object {
-        private const val BASE_URL = "https://avtobazar.infocar.ua"
-        const val IMG_URL = "https:"
-        const val NEWS_URL = "http://www.avtopoisk.ua/"
-        const val ARTICLES = "articles.php"
 
         private val interceptor = LogginInterceptor()
 
@@ -95,7 +92,7 @@ interface Api {
             .addInterceptor(interceptor).build()
 
         private val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(Gson()))

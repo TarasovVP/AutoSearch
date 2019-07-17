@@ -14,14 +14,14 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name="com.vptarasov.autosearch.ui.activity.SplashScreenActivity">
+        <activity android:name="com.vptarasov.autosearch.ui.activity.splash_screen.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.MainActivity"/>
+        <activity android:name=".ui.activity.main.MainActivity"/>
         <meta-data
                 android:name="com.google.android.gms.vision.DEPENDENCIES"
                 android:value="ocr" />

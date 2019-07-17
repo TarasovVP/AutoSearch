@@ -3,7 +3,7 @@
                                        android:id="@+id/nestedScrollNews"
                                        android:layout_width="match_parent"
                                        android:layout_height="match_parent"
-                                       tools:context=".ui.fragments.NewsPreviewFragment">
+                                       tools:context=".ui.fragments.news_preview.NewsPreviewFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

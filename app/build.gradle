@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
 androidExtensions {
     experimental = true
 }
@@ -72,4 +72,13 @@ dependencies {
     //OCR
     implementation 'com.rmtheis:tess-two:9.0.0'
 
+    // dependency injection
+    implementation "com.google.dagger:dagger:2.20"
+    implementation "com.google.dagger:dagger-android:2.20"
+    implementation "com.google.dagger:dagger-android-support:2.20"
+    kapt "com.google.dagger:dagger-compiler:2.20"
+    kapt "com.google.dagger:dagger-android-processor:2.20"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.20"
+    implementation 'javax.annotation:jsr250-api:1.0'
+    implementation 'javax.inject:javax.inject:1'
 }

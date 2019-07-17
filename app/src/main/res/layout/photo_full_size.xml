@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="1dp"
-    tools:context="com.vptarasov.autosearch.ui.fragments.PhotoFullSizeFragment">
+    tools:context="com.vptarasov.autosearch.ui.fragments.photo_full_size.PhotoFullSizeFragment">
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/photo_view"

@@ -5,8 +5,6 @@
     <color name="colorAccent">#008ecc</color>
 
     <color name="colorError">#800000</color>
-    <color name="colorSuccess">#008000</color>
-    <color name="colorInfo">#7F8182</color>
 
     <color name="colorDivider">#40000000</color>
     <color name="item_car_head">#ffc9cc</color>

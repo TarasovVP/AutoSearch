@@ -38,8 +38,6 @@
     <string name="no_internet">Нет интернет соединения</string>
     <string name="want_to_exit_app">Вы хотите выйти из приложения?</string>
     <string name="show_car">Show car</string>
-    <string name="information">Информация</string>
-    <string name="success">Успешно</string>
     <string name="error">Ошибка</string>
     <string name="write_to_seller">Написать</string>
     <string name="phone_to_seller">Позвонить</string>

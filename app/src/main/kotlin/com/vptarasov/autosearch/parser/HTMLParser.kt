@@ -2,9 +2,8 @@ package com.vptarasov.autosearch.parser
 
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.api.Api
-import com.vptarasov.autosearch.api.Api.Companion.NEWS_URL
 import com.vptarasov.autosearch.model.*
+import com.vptarasov.autosearch.util.Constants
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -22,7 +21,7 @@ class HTMLParser {
                 newsPreview.title = element.select("a")[i].text()
                 newsPreview.text = element.select("div[style=\"margin-top:5px;\"]")[i].text()
                 newsPreview.url = element.select("a").attr("href")
-                newsPreview.photo = NEWS_URL + element.select("img")[i].attr("src")
+                newsPreview.photo = Constants.NEWS_URL + element.select("img")[i].attr("src")
                 newsPreviews.add(newsPreview)
             }
         } catch (e: Exception) {
@@ -42,7 +41,7 @@ class HTMLParser {
         try {
             for (i in 0 until element.select("div[class^=car]").size) {
                 val carsList = Car()
-                carsList.photo = Api.IMG_URL + element.select("img[id*=img]")[i].attr("src")
+                carsList.photo = Constants.IMG_URL + element.select("img[id*=img]")[i].attr("src")
                 carsList.city = element.select("a.green")[i].text()
 
                 h = element.select("div[class=h]")[i]
@@ -109,9 +108,9 @@ class HTMLParser {
             val fotocol = element.select("div[id=fotocol]")
             val city = fotocol.select("div[id=where]").select("a").first().text()
             car.city = if (city.contains("(")) city.substring(0, city.indexOf('(')) else city
-            car.phone = Api.IMG_URL + fotocol.select("img.phone").attr("src")
-            car.photoSeller = Api.IMG_URL + fotocol.select("img").attr("src")
-            car.photo = Api.IMG_URL + fotocol.select("div#big_foto.spinner2").select("a").attr("href")
+            car.phone = Constants.IMG_URL + fotocol.select("img.phone").attr("src")
+            car.photoSeller = Constants.IMG_URL + fotocol.select("img").attr("src")
+            car.photo = Constants.IMG_URL + fotocol.select("div#big_foto.spinner2").select("a").attr("href")
             car.photoList = getPhotoList(element)
 
 
@@ -129,7 +128,7 @@ class HTMLParser {
             if (el.select("div#fotos").size > 0) {
 
                 for (i in 0 until foto.select("a").size) {
-                    photoList.add(Api.IMG_URL + foto.select("a")[i].attr("href"))
+                    photoList.add(Constants.IMG_URL + foto.select("a")[i].attr("href"))
                 }
             }
         }
