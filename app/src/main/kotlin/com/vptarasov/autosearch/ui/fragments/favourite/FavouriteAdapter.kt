@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.interfaces.FavoritesInteractionListener
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.ui.fragments.favourite.FavouriteAdapter.ViewHolderItem
 import kotlinx.android.synthetic.main.item_car.view.*
@@ -18,7 +17,7 @@ import java.util.*
 
 class FavouriteAdapter(val cars: ArrayList<Car>) : RecyclerView.Adapter<ViewHolderItem>(),
     View.OnClickListener {
-    private var listener: FavoritesInteractionListener? = null
+    private var listener: FavouriteContract.View? = null
 
     override fun getItemCount(): Int {
         return cars.size
@@ -57,12 +56,11 @@ class FavouriteAdapter(val cars: ArrayList<Car>) : RecyclerView.Adapter<ViewHold
         }
     }
 
-    fun setListener(listener: FavoritesInteractionListener) {
+    fun setListener(listener: FavouriteContract.View) {
         this.listener = listener
     }
 
     fun updateFavIcon(car: Car) {
-
         for (i in cars.indices) {
             if (car.id.equals(cars[i].id)) {
                 notifyItemChanged(i)

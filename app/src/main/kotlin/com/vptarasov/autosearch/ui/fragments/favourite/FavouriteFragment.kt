@@ -15,7 +15,6 @@ import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.database.HelperFactory
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
-import com.vptarasov.autosearch.interfaces.FavoritesInteractionListener
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.util.FragmentUtil
@@ -24,7 +23,7 @@ import java.sql.SQLException
 import java.util.*
 import javax.inject.Inject
 
-class FavouriteFragment : Fragment(), FavoritesInteractionListener, FavouriteContract.View {
+class FavouriteFragment : Fragment(), FavouriteContract.View {
 
     private var cars: List<Car>? = null
     private var adapter: FavouriteAdapter? = null
@@ -36,9 +35,29 @@ class FavouriteFragment : Fragment(), FavoritesInteractionListener, FavouriteCon
     @Inject
     lateinit var presenter: FavouriteContract.Presenter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injectDependency()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_favourite_list, container, false)
-        injectDependency()
+        initView(view)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.attach(this)
+        presenter.subscribe()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.unsubscribe()
+    }
+
+    override fun initView(view: View) {
         recyclerView = view.recyclerViewFavourite
         noFoundText = view.noFoundText
 
@@ -59,11 +78,9 @@ class FavouriteFragment : Fragment(), FavoritesInteractionListener, FavouriteCon
             noFoundText?.visibility = View.VISIBLE
 
         }
-        return view
     }
-
     @SuppressLint("SetTextI18n")
-    fun initAdapter() {
+    override fun initAdapter() {
 
         for (car in cars!!) {
             car.setBookmarked(isCarBookmarked(car))
@@ -80,7 +97,6 @@ class FavouriteFragment : Fragment(), FavoritesInteractionListener, FavouriteCon
     override fun onItemClick(car: Car) {
         val bundle = Bundle()
         bundle.putString("carUrl", car.url)
-        bundle.putSerializable("car", car)
         val carFragment = CarFragment()
         carFragment.arguments = bundle
         fragmentManager?.let { FragmentUtil.replaceFragment(it, carFragment, true) }

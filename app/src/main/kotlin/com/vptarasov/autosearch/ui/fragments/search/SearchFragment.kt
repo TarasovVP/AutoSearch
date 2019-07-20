@@ -1,6 +1,5 @@
 package com.vptarasov.autosearch.ui.fragments.search
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,20 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.api.Api
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.model.City
 import com.vptarasov.autosearch.model.Model
 import com.vptarasov.autosearch.model.QueryDetails
 import com.vptarasov.autosearch.model.SearchData
-import com.vptarasov.autosearch.parser.HTMLParser
-import com.vptarasov.autosearch.ui.fragments.BaseFragment
-import com.vptarasov.autosearch.ui.fragments.car.CarContract
+import com.vptarasov.autosearch.ui.fragments.base.BaseFragment
 import com.vptarasov.autosearch.ui.fragments.cars_list.CarsListFragment
 import com.vptarasov.autosearch.util.FragmentUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_search_main.view.*
 import java.util.*
 import javax.inject.Inject
@@ -56,15 +50,49 @@ class SearchFragment : BaseFragment(), SearchContract.View {
     private var searchPetrolElectro: CheckBox? = null
 
     @Inject
-    lateinit var presenter: CarContract.Presenter
+    lateinit var presenter: SearchContract.Presenter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+        injectDependency()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflateWithLoadingIndicator(R.layout.fragment_search_main, container)
-        injectDependency()
+        initView(view)
+        return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val bundle = arguments
+        searchData = bundle?.getSerializable("searchData") as SearchData
+        setDataToSpinner(searchData)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.attach(this)
+        presenter.subscribe()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.unsubscribe()
+    }
+
+    private fun injectDependency() {
+        val fragmentComponent = DaggerFragmentComponent.builder()
+            .fragmentModule(FragmentModule())
+            .build()
+
+        fragmentComponent.inject(this)
+    }
+
+    override fun initView(view: View) {
         searchModel = view.searchModel
         searchCity = view.searchCity
-        searchMark = view.searchMark
-        searchRegion = view.searchRegion
         searchYearFrom = view.searchYearFrom
         searchYearTo = view.searchYearTo
         searchBody = view.searchBody
@@ -83,54 +111,46 @@ class SearchFragment : BaseFragment(), SearchContract.View {
         searchGas = view.searchGas
         searchPetrolElectro = view.searchPetrolElectro
 
-        val applyButton: Button? = view.applyButton
-        val resetButton: Button? = view.resetButton
-
-        val bundle = arguments
-        searchData = bundle?.getSerializable("searchData") as SearchData
-        setDataToSpinner(searchData)
-
+        searchMark = view.searchMark
         searchMark?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-
                 val item = parent.getItemAtPosition(position)
                 val key = searchData?.mark?.let { getKeyFromValue(
                     it,
                     item
                 ).toString() }
                 if ("0" != key) {
-                    getModel(key)
+                    presenter.getModel(key, searchModel)
                 } else {
                     fulfillSpinner(ArrayList(), searchModel)
                 }
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {
-
             }
         }
+
+        searchRegion = view.searchRegion
         searchRegion?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-
                 val item = parent.getItemAtPosition(position)
                 val key = searchData?.region?.let { getKeyFromValue(
                     it,
                     item
                 ).toString() }
                 if ("0" != key) {
-                    getCity(key)
+                    presenter.getCity(key, searchCity)
                 } else {
                     fulfillSpinner(ArrayList(), searchCity)
                 }
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {
-
             }
         }
 
+        val resetButton: Button? = view.resetButton
         resetButton?.setOnClickListener { resetViewValues() }
 
+        val applyButton: Button? = view.applyButton
         applyButton?.setOnClickListener {
 
             queryDetails = QueryDetails()
@@ -143,28 +163,10 @@ class SearchFragment : BaseFragment(), SearchContract.View {
             val carsListFragment = CarsListFragment()
             carsListFragment.arguments = bundle1
             fragmentManager?.let { FragmentUtil.replaceFragment(it, carsListFragment, true) }
-
-
         }
-
-        return view
     }
 
-    private fun injectDependency() {
-        val fragmentComponent = DaggerFragmentComponent.builder()
-            .fragmentModule(FragmentModule())
-            .build()
-
-        fragmentComponent.inject(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
-
-
-    private fun setDataToSpinner(searchData: SearchData?) {
+    override fun setDataToSpinner(searchData: SearchData?) {
         fulfillSpinner(ArrayList(searchData?.mark!!.values), searchMark)
         fulfillSpinner(ArrayList(searchData.region!!.values), searchRegion)
         fulfillSpinner(ArrayList(searchData.year!!.values), searchYearFrom)
@@ -176,7 +178,7 @@ class SearchFragment : BaseFragment(), SearchContract.View {
         fulfillSpinner(ArrayList(searchData.color!!.values), searchColor)
     }
 
-    fun fulfillSpinner(arrayList: ArrayList<String>, spinner: Spinner?) {
+    override fun fulfillSpinner(arrayList: ArrayList<String>, spinner: Spinner?) {
         Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER)
         val adapter =
             ArrayAdapter(Objects.requireNonNull<Context>(context), android.R.layout.simple_spinner_item, arrayList)
@@ -266,44 +268,37 @@ class SearchFragment : BaseFragment(), SearchContract.View {
             queryDetails!!.gearboxMech = "1"
         } else
             queryDetails!!.gearboxMech = ""
-
         if (searchGearboxAutom!!.isChecked) {
             queryDetails!!.gearboxAutom = "2"
         } else
             queryDetails!!.gearboxAutom = ""
-
         if (searchPetrol!!.isChecked) {
             queryDetails!!.petrol = "1"
         } else
             queryDetails!!.petrol = ""
-
         if (searchDiesel!!.isChecked) {
             queryDetails!!.diesel = "2"
         } else
             queryDetails!!.diesel = ""
-
         if (searchGasPetrol!!.isChecked) {
             queryDetails!!.gasPetrol = "4"
         } else
             queryDetails!!.gasPetrol = ""
-
         if (searchElectro!!.isChecked) {
             queryDetails!!.electro = "6"
         } else
             queryDetails!!.electro = ""
-
         if (searchGas!!.isChecked) {
             queryDetails!!.gas = "3"
         } else
             queryDetails!!.gas = ""
-
         if (searchPetrolElectro!!.isChecked) {
             queryDetails!!.petrolElectro = "5"
         } else
             queryDetails!!.petrolElectro = ""
     }
 
-    private fun resetViewValues() {
+    override fun resetViewValues() {
         setDataToSpinner(searchData)
 
         searchPriceFrom!!.setText("")
@@ -312,71 +307,30 @@ class SearchFragment : BaseFragment(), SearchContract.View {
         if (searchGearboxMech!!.isChecked) {
             searchGearboxMech!!.isChecked = false
         }
-
         if (searchGearboxAutom!!.isChecked) {
             searchGearboxAutom!!.isChecked = false
         }
-
         if (searchPetrol!!.isChecked) {
             searchPetrol!!.isChecked = false
         }
-
         if (searchDiesel!!.isChecked) {
             searchDiesel!!.isChecked = false
         }
-
         if (searchGasPetrol!!.isChecked) {
             searchGasPetrol!!.isChecked = false
         }
-
         if (searchElectro!!.isChecked) {
             searchElectro!!.isChecked = false
         }
-
         if (searchGas!!.isChecked) {
             searchGas!!.isChecked = false
         }
-
         if (searchPetrolElectro!!.isChecked) {
             searchPetrolElectro!!.isChecked = false
         }
-
-    }
-
-    @SuppressLint("CheckResult")
-    private fun getModel(mark: String?) {
-        Api
-            .service
-            .getModel(mark)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ responseBody ->
-                val htmlParser = HTMLParser()
-                val html = responseBody.string()
-                model = htmlParser.getModel(html)
-                fulfillSpinner(ArrayList(model!!.model!!.values), searchModel)
-
-            }, { throwable -> throwable.printStackTrace() })
-    }
-
-    @SuppressLint("CheckResult")
-    private fun getCity(region: String?) {
-        Api
-            .service
-            .getCity(region)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ responseBody ->
-                val htmlParser = HTMLParser()
-                val html = responseBody.string()
-                city = htmlParser.getCity(html)
-                fulfillSpinner(ArrayList(city!!.city!!.values), searchCity)
-
-            }, { throwable -> throwable.printStackTrace() })
     }
 
     companion object {
-
         fun getKeyFromValue(map: Map<String, String>?, value: Any): Any? {
             for (`object` in map?.keys!!) {
                 if (Objects.requireNonNull<Any>(map[`object`]) == value) {

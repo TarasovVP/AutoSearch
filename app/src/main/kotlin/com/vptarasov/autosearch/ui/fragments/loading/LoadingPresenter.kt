@@ -2,8 +2,8 @@ package com.vptarasov.autosearch.ui.fragments.loading
 
 import android.annotation.SuppressLint
 import com.vptarasov.autosearch.api.Api
+import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.model.SearchData
-import com.vptarasov.autosearch.parser.HTMLParser
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -16,8 +16,8 @@ class LoadingPresenter : LoadingContract.Presenter {
     private var searchData: SearchData? = null
 
     @SuppressLint("CheckResult")
-    override fun loadData() {
-        Api.service.loadData("")
+    override fun loadSearchData() {
+        Api.service.loadSearchData("")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ responseBody ->
@@ -37,7 +37,7 @@ class LoadingPresenter : LoadingContract.Presenter {
     }
 
     override fun attach(view: LoadingContract.View) {
-
+        this.view = view
     }
 
     override fun getSearchData(): SearchData? {

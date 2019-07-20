@@ -1,4 +1,4 @@
-package com.vptarasov.autosearch.interfaces;
+package com.vptarasov.autosearch.animation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

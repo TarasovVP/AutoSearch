@@ -32,24 +32,6 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     private lateinit var newsPreviewFragment: Fragment
     private lateinit var searchData: SearchData
 
-    override fun showCarsListFragment() {
-        FragmentUtil.replaceFragment(supportFragmentManager, carsListFragment, true)
-    }
-
-    override fun showSearchFragment() {
-        val bundle = Bundle()
-        bundle.putSerializable("searchData", searchData)
-        searchFragment.arguments = bundle
-        FragmentUtil.replaceFragment(supportFragmentManager, searchFragment, true)
-    }
-
-    override fun showFavouriteListFragment() {
-        FragmentUtil.replaceFragment(supportFragmentManager, favouriteListFragment, true)
-    }
-
-    override fun showNewsPreviewFragment() {
-        FragmentUtil.replaceFragment(supportFragmentManager, newsPreviewFragment, true)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,14 +39,14 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
         injectDependency()
 
         val intent = intent
-        searchData = intent.getSerializableExtra("searchData") as SearchData
+        searchData = (intent.getSerializableExtra("searchData") as? SearchData)!!
 
         searchFragment = SearchFragment()
         carsListFragment = CarsListFragment()
         favouriteListFragment = FavouriteFragment()
         newsPreviewFragment = NewsPreviewFragment()
 
-
+        presenter.attach(this)
         setNavigationVisibiltity(true)
         navigation.setOnNavigationItemSelectedListener(this)
 
@@ -74,9 +56,6 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
             offLineText.visibility = View.VISIBLE
             offLineImage.visibility = View.VISIBLE
         }
-
-        presenter.attach(this)
-
 
     }
 
@@ -136,7 +115,24 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
 
     }
 
+    override fun showCarsListFragment() {
+        FragmentUtil.replaceFragment(supportFragmentManager, carsListFragment, false)
+    }
 
+    override fun showSearchFragment() {
+        val bundle = Bundle()
+        bundle.putSerializable("searchData", searchData)
+        searchFragment.arguments = bundle
+        FragmentUtil.replaceFragment(supportFragmentManager, searchFragment, true)
+    }
+
+    override fun showFavouriteListFragment() {
+        FragmentUtil.replaceFragment(supportFragmentManager, favouriteListFragment, true)
+    }
+
+    override fun showNewsPreviewFragment() {
+        FragmentUtil.replaceFragment(supportFragmentManager, newsPreviewFragment, true)
+    }
 
 
 }

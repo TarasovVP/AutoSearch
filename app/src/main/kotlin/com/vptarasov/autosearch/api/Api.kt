@@ -22,7 +22,7 @@ interface Api {
     fun loadUrl(@Url url: String?): Observable<ResponseBody>
 
     @GET("search-car/?onp=20")
-    fun loadData(@Query(value = "w", encoded = true) page: String): Observable<ResponseBody>
+    fun loadSearchData(@Query(value = "w", encoded = true) page: String): Observable<ResponseBody>
 
     @GET("search-car/?onp=20")
     fun getModel(@Query(value = "m[]") mark: String?): Observable<ResponseBody>
@@ -31,7 +31,7 @@ interface Api {
     fun getCity(@Query(value = "o[]") mark: String?): Observable<ResponseBody>
 
     @GET("search-car/?onp=20")
-    fun searchCars(
+    fun loadCars(
         @Query(value = "m[]") mark: String?,
         @Query(value = "n[]") model: String?,
         @Query(value = "o[]") region: String?,

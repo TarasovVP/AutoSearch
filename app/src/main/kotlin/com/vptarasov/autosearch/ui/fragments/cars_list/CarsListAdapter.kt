@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.interfaces.CarsInteractionListener
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.ui.fragments.cars_list.CarsListAdapter.ViewHolderItem
 import kotlinx.android.synthetic.main.item_car.view.*
@@ -18,7 +17,7 @@ import java.util.*
 
 class CarsListAdapter(private val cars: ArrayList<Car>) : RecyclerView.Adapter<ViewHolderItem>(),
     View.OnClickListener {
-    private var listener: CarsInteractionListener? = null
+    private var listener: CarsListContract.View? = null
 
     override fun getItemCount(): Int {
         return cars.size
@@ -76,7 +75,7 @@ class CarsListAdapter(private val cars: ArrayList<Car>) : RecyclerView.Adapter<V
         }
     }
 
-    fun setListener(listener: CarsInteractionListener) {
+    fun setListener(listener: CarsListContract.View) {
         this.listener = listener
     }
 

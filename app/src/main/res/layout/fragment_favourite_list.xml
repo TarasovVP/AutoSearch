@@ -3,7 +3,6 @@
                                        android:id="@+id/scrollViewListFavourites"
                                        android:layout_width="match_parent"
                                        android:layout_height="match_parent"
-                                       android:layout_marginBottom="55dp"
                                        tools:context=".ui.fragments.favourite.FavouriteFragment">
 
     <LinearLayout

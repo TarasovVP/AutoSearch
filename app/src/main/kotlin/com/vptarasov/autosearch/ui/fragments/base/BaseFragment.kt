@@ -1,4 +1,4 @@
-package com.vptarasov.autosearch.ui.fragments
+package com.vptarasov.autosearch.ui.fragments.base
 
 import android.animation.LayoutTransition
 import android.os.Build
@@ -12,8 +12,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.tapadoo.alerter.Alerter
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.interfaces.Animated
-import com.vptarasov.autosearch.util.ScreenAnimations
+import com.vptarasov.autosearch.animation.Animated
+import com.vptarasov.autosearch.animation.ScreenAnimations
 import java.util.*
 
 open class BaseFragment : Fragment() {
@@ -95,7 +95,8 @@ open class BaseFragment : Fragment() {
     }
 
     companion object {
-         var screenAnimations: ScreenAnimations = ScreenAnimations()
+         var screenAnimations: ScreenAnimations =
+             ScreenAnimations()
     }
 
 }

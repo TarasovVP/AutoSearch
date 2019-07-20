@@ -5,10 +5,12 @@ import com.vptarasov.autosearch.ui.AppContract
 
 class LoadingContract {
 
-    interface View: AppContract.View
+    interface View: AppContract.View{
+        fun showMainActivity()
+    }
 
     interface Presenter: AppContract.Presenter<View>{
-        fun loadData()
+        fun loadSearchData()
         fun getSearchData(): SearchData?
     }
 }

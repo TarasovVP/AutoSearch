@@ -1,4 +1,4 @@
-package com.vptarasov.autosearch.util
+package com.vptarasov.autosearch.animation
 
 import android.os.Build
 import android.util.Log
@@ -8,9 +8,7 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import com.vptarasov.autosearch.BuildConfig
-import com.vptarasov.autosearch.interfaces.Animated
-import com.vptarasov.autosearch.interfaces.AnimationFinished
-import com.vptarasov.autosearch.interfaces.NextAnimation
+import com.vptarasov.autosearch.util.RxUtil
 import io.reactivex.functions.Consumer
 import java.util.*
 

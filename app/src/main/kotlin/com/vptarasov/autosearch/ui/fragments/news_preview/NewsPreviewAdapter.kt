@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.interfaces.NewsInteractionListener
 import com.vptarasov.autosearch.model.News
 import kotlinx.android.synthetic.main.item_news.view.*
 import java.util.*
@@ -16,7 +15,7 @@ import java.util.*
 
 class NewsPreviewAdapter(private val previews: ArrayList<News>) :
     RecyclerView.Adapter<NewsPreviewAdapter.ViewHolderItem>(), View.OnClickListener {
-    private var listener: NewsInteractionListener? = null
+    private var listener: NewsPreviewContract.View? = null
 
     override fun getItemCount(): Int {
         return previews.size
@@ -45,7 +44,7 @@ class NewsPreviewAdapter(private val previews: ArrayList<News>) :
 
     }
 
-    fun setListener(listener: NewsInteractionListener) {
+    fun setListener(listener: NewsPreviewContract.View) {
         this.listener = listener
     }
 

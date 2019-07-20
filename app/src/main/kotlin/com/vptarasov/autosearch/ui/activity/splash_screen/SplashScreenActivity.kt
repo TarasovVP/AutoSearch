@@ -21,10 +21,12 @@ class SplashScreenActivity : AppCompatActivity(), SplashScreenContract.View {
         injectDependency()
         presenter.attach(this)
     }
+
     override fun showLoadingFragment() {
         FragmentUtil.replaceFragment(supportFragmentManager,
             LoadingFragment(), false)
     }
+
     private fun injectDependency() {
         val activityComponent = DaggerActivityComponent.builder()
             .activityModule(ActivityModule(this))

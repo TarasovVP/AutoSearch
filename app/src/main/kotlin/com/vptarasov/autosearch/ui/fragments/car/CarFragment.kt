@@ -1,9 +1,6 @@
 package com.vptarasov.autosearch.ui.fragments.car
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
@@ -20,17 +15,13 @@ import com.google.android.material.tabs.TabLayout
 import com.squareup.picasso.Picasso
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.api.Api
 import com.vptarasov.autosearch.database.HelperFactory
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.model.Car
-import com.vptarasov.autosearch.parser.HTMLParser
 import com.vptarasov.autosearch.ui.fragments.photo_full_size.PhotoFullSizeFragment
 import com.vptarasov.autosearch.util.FragmentUtil
 import com.vptarasov.autosearch.util.OCR
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_car.view.*
 import java.io.IOException
 import java.sql.SQLException
@@ -41,7 +32,6 @@ import javax.inject.Inject
 class CarFragment : Fragment(), CarContract.View {
 
     private var photoList: ArrayList<String>? = null
-    private var car: Car? = null
     private var viewPager: ViewPager? = null
     private var sellerPhone: String? = null
 
@@ -67,10 +57,38 @@ class CarFragment : Fragment(), CarContract.View {
     @Inject
     lateinit var presenter: CarContract.Presenter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injectDependency()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_car, container, false)
-        injectDependency()
+        initView(view)
+        return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val args = arguments
+        if (args != null) {
+            val url = args.getString("carUrl")
+            presenter.loadCar(url)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.attach(this)
+        presenter.subscribe()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.unsubscribe()
+    }
+
+    override fun initView(view: View){
         viewPager = view.pager
         name = view.nameCar
         price = view.priceCar
@@ -91,103 +109,10 @@ class CarFragment : Fragment(), CarContract.View {
         textCar = view.textCar
         val tabLayout = view.findViewById<View>(R.id.tabDots) as TabLayout
         tabLayout.setupWithViewPager(viewPager, true)
-
-        if (ContextCompat.checkSelfPermission(context!!,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-            } else {
-                ActivityCompat.requestPermissions(activity!!,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    1)
-            }
-        }
-
-        callButton?.setOnClickListener {
-            val callIntent = Intent(Intent.ACTION_DIAL)
-            callIntent.data = Uri.parse("tel:" + sellerPhone!!)
-            startActivity(callIntent)
-        }
-        writeButton?.setOnClickListener {
-            val writeIntent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + sellerPhone!!))
-            startActivity(writeIntent)
-        }
-
-        buttonBack?.setOnClickListener { Objects.requireNonNull(fragmentManager)?.popBackStack() }
-        zoomOut?.setOnClickListener {
-            val photoFullSizeFragment = PhotoFullSizeFragment()
-            val bundle = Bundle()
-            bundle.putStringArrayList("photoList", photoList)
-            bundle.putInt("viewPagerPosition", viewPager!!.currentItem)
-            bundle.putString("name", car?.name)
-            bundle.putString("price", car?.price)
-            bundle.putString("year", car?.year)
-            photoFullSizeFragment.arguments = bundle
-            FragmentUtil.replaceFragment(
-                (view.context as AppCompatActivity).supportFragmentManager,
-                photoFullSizeFragment,
-                true
-            )
-        }
-        favouriteCar?.setOnClickListener { v ->
-            try {
-                HelperFactory.helper!!.getFavoritesDao().switchBookmarkedStatus(car)
-                if (isCarBookmarked) {
-                    Toast.makeText(v.context, App.instance?.getString(R.string.add_favor), Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(v.context, App.instance?.getString(R.string.delete_favor), Toast.LENGTH_SHORT)
-                        .show()
-                }
-                updateFavIcon()
-
-            } catch (e: SQLException) {
-                e.printStackTrace()
-            }
-        }
-        return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val args = arguments
-
-        if (args != null) {
-            val url = args.getString("carUrl")
-            loadCar(url)
-            car = args.getSerializable("car") as Car
-            updateFavIcon()
-        }
-    }
-
-
-    @SuppressLint("CheckResult")
-    private fun loadCar(url: String?) {
-        Api
-            .service
-            .loadUrl(url)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ responseBody ->
-
-                val html = responseBody.string()
-                val htmlParser = HTMLParser()
-                val car = htmlParser.getCar(html)
-
-                setDataToViews(car)
-
-            }, { throwable -> throwable.printStackTrace() })
-    }
-
-
-    private fun updateFavIcon() {
-        favouriteCar?.setBackgroundResource(if (isCarBookmarked) R.drawable.favouritechecked else R.drawable.favourite)
-    }
-
-    private fun setDataToViews(car: Car) {
+    override fun setDataToViews(car: Car) {
+        updateFavIcon(car)
         name?.text = car.name
         year?.text = car.year
         price?.text = car.price
@@ -215,21 +140,54 @@ class CarFragment : Fragment(), CarContract.View {
             }
         }
         thread.start()
+        callButton?.setOnClickListener {
+            val callIntent = Intent(Intent.ACTION_DIAL)
+            callIntent.data = Uri.parse("tel:" + sellerPhone!!)
+            startActivity(callIntent)
+        }
+        writeButton?.setOnClickListener {
+            val writeIntent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + sellerPhone!!))
+            startActivity(writeIntent)
+        }
+
+        buttonBack?.setOnClickListener { Objects.requireNonNull(fragmentManager)?.popBackStack() }
+        zoomOut?.setOnClickListener {
+            val photoFullSizeFragment = PhotoFullSizeFragment()
+            val bundle = Bundle()
+            bundle.putStringArrayList("photoList", photoList)
+            bundle.putInt("viewPagerPosition", viewPager!!.currentItem)
+            bundle.putString("name", car.name)
+            bundle.putString("price", car.price)
+            bundle.putString("year", car.year)
+            photoFullSizeFragment.arguments = bundle
+            FragmentUtil.replaceFragment(
+                (view?.context as AppCompatActivity).supportFragmentManager,
+                photoFullSizeFragment,
+                true
+            )
+        }
+        favouriteCar?.setOnClickListener {
+            try {
+                HelperFactory.helper!!.getFavoritesDao().switchBookmarkedStatus(car)
+                car.setBookmarked(isCarBookmarked(car))
+                Toast.makeText(
+                    context, App.instance?.getString(
+                        if (car.isBookmarked())
+                            R.string.add_favor
+                        else
+                            R.string.delete_favor
+                    ), Toast.LENGTH_SHORT
+                ).show()
+                    updateFavIcon(car)
+
+            } catch (e: SQLException) {
+                e.printStackTrace()
+            }
+        }
 
         photoList = car.photoList
         viewPager?.adapter = PhotoAdapter(childFragmentManager, photoList)
     }
-    private val isCarBookmarked: Boolean
-        get() {
-            var bookmarked = false
-            try {
-                bookmarked = HelperFactory.helper!!.getFavoritesDao().exists(car)
-            } catch (e: SQLException) {
-                e.printStackTrace()
-            }
-
-            return bookmarked
-        }
 
     private fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()
@@ -238,7 +196,19 @@ class CarFragment : Fragment(), CarContract.View {
 
         fragmentComponent.inject(this)
     }
+    private fun updateFavIcon(car: Car) {
+        favouriteCar?.setBackgroundResource(if (car.isBookmarked()) R.drawable.favouritechecked else R.drawable.favourite)
+    }
 
+    private fun isCarBookmarked(car: Car): Boolean {
+        var bookmarked = false
+        try {
+            bookmarked = HelperFactory.helper?.getFavoritesDao()!!.exists(car)
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
 
+        return bookmarked
+    }
 
 }

@@ -13,28 +13,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.api.Api
 import com.vptarasov.autosearch.database.HelperFactory
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
-import com.vptarasov.autosearch.interfaces.CarsInteractionListener
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.model.QueryDetails
-import com.vptarasov.autosearch.parser.HTMLParser
-import com.vptarasov.autosearch.ui.fragments.BaseFragment
+import com.vptarasov.autosearch.ui.fragments.base.BaseFragment
 import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.util.FragmentUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_cars_list.view.*
 import kotlinx.android.synthetic.main.list_pages.view.*
-import org.jsoup.Jsoup
 import java.sql.SQLException
-import java.util.*
 import javax.inject.Inject
 
-class CarsListFragment : BaseFragment(), CarsInteractionListener, CarsListContract.View {
-
+class CarsListFragment : BaseFragment(), CarsListContract.View {
 
     private var adapter: CarsListAdapter? = null
     private var page: Int = 1
@@ -53,118 +45,82 @@ class CarsListFragment : BaseFragment(), CarsInteractionListener, CarsListContra
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+        injectDependency()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflateWithLoadingIndicator(R.layout.fragment_cars_list, container)
+        initView(view)
+        return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val args = arguments
+        if (cars == null) {
+            if (args?.getSerializable("queryDetails") != null) {
+                queryDetails = args.getSerializable("queryDetails") as QueryDetails
+                presenter.loadCars(queryDetails, page)
+
+            } else {
+                queryDetails = QueryDetails()
+                presenter.loadCars(queryDetails, page)
+            }
+        } else {
+            initAdapter(cars!!, lastPage)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.attach(this)
+        presenter.subscribe()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.unsubscribe()
+    }
+
+    override fun getLastPage(lastPage: Int) {
+        this.lastPage = lastPage
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onCreateView(inflater: LayoutInflater,  container: ViewGroup?,  savedInstanceState: Bundle?): View? {
-        val view = inflateWithLoadingIndicator(R.layout.fragment_cars_list, container)
-        injectDependency()
+    private fun preformSearch() {
+        presenter.loadCars(queryDetails, page)
+        tvPage.text = App.instance?.getString(R.string.page) + " " + page + " из " + lastPage
+        recyclerViewCar.smoothScrollToPosition(0)
+    }
+
+    override fun initView(view: View) {
         recyclerViewCar = view.recyclerViewCar
         btnRight = view.btnRight
         btnLeft = view.btnLeft
         tvPage = view.tvPage
         searchPaging = view.searchPaging as RelativeLayout
-        val args = arguments
-        if (cars == null) {
-            if (args?.getSerializable("queryDetails") != null) {
-                queryDetails = args.getSerializable("queryDetails") as QueryDetails
-                searchCars()
 
-            } else {
-                queryDetails = QueryDetails()
-                searchCars()
-            }
-        } else {
-            initAdapter()
-        }
         btnRight.setOnClickListener {
             if (page < lastPage) {
                 page++
                 preformSearch()
             }
-
         }
         btnLeft.setOnClickListener {
             if (page > 1) {
                 page--
                 preformSearch()
             }
-
         }
-
-
-        return view
     }
 
     @SuppressLint("SetTextI18n")
-    private fun preformSearch() {
-        searchCars()
-        tvPage.text = App.instance?.getString(R.string.page) + " " + page + " из " + lastPage
-        recyclerViewCar.smoothScrollToPosition(0)
-    }
-
-    @SuppressLint("CheckResult")
-    private fun searchCars() {
-        setLoading(true)
-        Api
-            .service
-            .searchCars(
-                queryDetails?.mark,
-                queryDetails?.model,
-                queryDetails?.region,
-                queryDetails?.city,
-                queryDetails?.body,
-                queryDetails?.color,
-                queryDetails?.engineFrom,
-                queryDetails?.engineUnit,
-                queryDetails?.yearFrom,
-                queryDetails?.engineTo,
-                queryDetails?.yearTo,
-                queryDetails?.priceFrom,
-                queryDetails?.priceTo,
-                queryDetails?.petrolElectro,
-                queryDetails?.diesel,
-                queryDetails?.electro,
-                queryDetails?.gas,
-                queryDetails?.gasPetrol,
-                queryDetails?.petrol,
-                queryDetails?.gearboxAutom,
-                queryDetails?.gearboxMech,
-                page.toString()
-            )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ responseBody ->
-                val htmlParser = HTMLParser()
-                val html = responseBody.string()
-                cars = htmlParser.getCarList(html)
-                val el = Jsoup.parse(html).select("div[id=paging]")
-                lastPage = if (el.size > 0) {
-                    Integer.valueOf(el.select("a").last().text())
-                } else
-                    1
-                if (cars!!.size > 0) {
-                    initAdapter()
-                } else {
-                    showErrorMessage(R.string.nothing_found)
-                }
-                setLoading(false)
-
-            }, { throwable ->
-                throwable.printStackTrace()
-                setLoading(true)
-            })
-    }
-
-
-    @SuppressLint("SetTextI18n")
-    fun initAdapter() {
-
-        for (car in cars!!) {
+    override fun initAdapter(cars: ArrayList<Car>, lastPage: Int) {
+        for (car in cars) {
             car.setBookmarked(isCarBookmarked(car))
         }
 
-        adapter = CarsListAdapter(cars!!)
+        adapter = CarsListAdapter(cars)
         adapter?.setListener(this)
         recyclerViewCar.layoutManager = LinearLayoutManager(context)
         recyclerViewCar.adapter = adapter
@@ -187,7 +143,6 @@ class CarsListFragment : BaseFragment(), CarsInteractionListener, CarsListContra
     override fun onItemClick(car: Car) {
         val bundle = Bundle()
         bundle.putString("carUrl", car.url)
-        bundle.putSerializable("car", car)
         val carFragment = CarFragment()
         carFragment.arguments = bundle
         fragmentManager?.let { FragmentUtil.replaceFragment(it, carFragment, true) }

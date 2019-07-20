@@ -1,4 +1,4 @@
-package com.vptarasov.autosearch.parser
+package com.vptarasov.autosearch.api
 
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
@@ -20,7 +20,7 @@ class HTMLParser {
                 val newsPreview = News()
                 newsPreview.title = element.select("a")[i].text()
                 newsPreview.text = element.select("div[style=\"margin-top:5px;\"]")[i].text()
-                newsPreview.url = element.select("a").attr("href")
+                newsPreview.url = element.select("a")[i].attr("href")
                 newsPreview.photo = Constants.NEWS_URL + element.select("img")[i].attr("src")
                 newsPreviews.add(newsPreview)
             }
@@ -29,6 +29,22 @@ class HTMLParser {
         }
 
         return newsPreviews
+    }
+
+    fun getNews(html: String): News {
+        val news = News()
+        val element = Jsoup.parse(html).select("td.content")
+        try {
+            news.title = element.select("h1").text()
+            val content = element.select("div.green_content")
+            news.text = content.toString().replace("href".toRegex(), "").replace("Источник: ".toRegex(), "")
+                .replace("http://www.autonews.ru".toRegex(), "")
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return news
     }
 
     fun getCarList(html: String): ArrayList<Car> {
@@ -46,7 +62,8 @@ class HTMLParser {
 
                 h = element.select("div[class=h]")[i]
                 carsList.name = h.select("a").first().text()
-                carsList.price = h.getElementsByClass("tips").text().substring(h.getElementsByClass("tips").text().indexOf("/") + 2)
+                carsList.price =
+                    h.getElementsByClass("tips").text().substring(h.getElementsByClass("tips").text().indexOf("/") + 2)
                 carsList.year = h.select("strong").text()
 
                 arrayTech = getValue(element.select("div[class=tech]")[i])
@@ -73,11 +90,12 @@ class HTMLParser {
     }
 
     private fun getValue(element: Element): Array<String> {
-        val text = element.html().replace("\n".toRegex(), "").replace("<strong>".toRegex(), "").replace("</strong>".toRegex(), " ").replace("<span>".toRegex(), "").replace("</span>".toRegex(), " ")
+        val text = element.html().replace("\n".toRegex(), "").replace("<strong>".toRegex(), "")
+            .replace("</strong>".toRegex(), " ").replace("<span>".toRegex(), "").replace("</span>".toRegex(), " ")
         return text.split("<br>".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
     }
 
-     fun getCar(html: String): Car {
+    fun getCar(html: String): Car {
         val car = Car()
 
 
@@ -89,7 +107,10 @@ class HTMLParser {
             car.year = infocol.select("span").first().text()
             car.price = infocol.select("abbr").first().text()
             if (infocol.select("p").first() != null) {
-                car.webMainText = infocol.select("p").first().html().replace("<span>Внимание! Не звоните на номера с кодами 090, 080, 070 <a href=\"//avtobazar.infocar.ua/faq/moshen/\" rel=\"nofollow\" class=\"red\">почему\\?</a></span>".toRegex(), "")
+                car.webMainText = infocol.select("p").first().html().replace(
+                    "<span>Внимание! Не звоните на номера с кодами 090, 080, 070 <a href=\"//avtobazar.infocar.ua/faq/moshen/\" rel=\"nofollow\" class=\"red\">почему\\?</a></span>".toRegex(),
+                    ""
+                )
             } else {
                 car.webMainText = ""
 
@@ -163,6 +184,11 @@ class HTMLParser {
         val element = elements.select("div[id=left_col]")
         city.city = (getHashMap(element.select("select.citysel").select("option")))
         return city
+    }
+
+    fun getLastPage(html: String): Int{
+        val element = Jsoup.parse(html).select("div[id=paging]")
+        return if(element.size > 0) Integer.valueOf(element.select("a").last().text()) else 1
     }
 
 

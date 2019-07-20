@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.vptarasov.autosearch.R
@@ -21,19 +23,27 @@ class PhotoFullSizeFragment : Fragment(), PhotoFullSizeContract.View {
     private var year: String? = null
     private var viewPagerPosition: Int = 0
 
+    private var pagerFullSize: ViewPager? = null
+    private var nameCar: TextView? = null
+    private var priceCar: TextView? = null
+    private var yearCar: TextView? = null
+    private var buttonBackFullPhoto: ImageView? = null
+
     @Inject
     lateinit var presenter: PhotoFullSizeContract.Presenter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injectDependency()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_photo_full_size, container, false)
-        injectDependency()
-        val pagerFullSize: ViewPager = view.pagerFullSize
-        val nameCar = view.nameCar
-        val priceCar = view.priceCar
-        val yearCar = view.yearCar
-        val buttonBackFullPhoto = view.buttonBackFullPhoto
-
-        buttonBackFullPhoto?.setOnClickListener { Objects.requireNonNull(fragmentManager)?.popBackStack() }
+        initView(view)
+        return view
+    }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         val args = arguments
         if (args != null) {
             photoList = args.getStringArrayList("photoList")
@@ -42,14 +52,21 @@ class PhotoFullSizeFragment : Fragment(), PhotoFullSizeContract.View {
             year = args.getString("year")
             price = args.getString("price")
         }
-        pagerFullSize.adapter =
-            PhotoFullSizeAdapter(childFragmentManager, photoList)
-        pagerFullSize.currentItem = viewPagerPosition
-        nameCar?.text = name
-        yearCar?.text = year
-        priceCar?.text = price
-        return view
+        setDataToViews()
+
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.attach(this)
+        presenter.subscribe()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.unsubscribe()
+    }
+
     private fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()
             .fragmentModule(FragmentModule())
@@ -58,5 +75,23 @@ class PhotoFullSizeFragment : Fragment(), PhotoFullSizeContract.View {
         fragmentComponent.inject(this)
     }
 
+    override fun initView(view: View) {
+        pagerFullSize= view.pagerFullSize
+        nameCar = view.nameCar
+        priceCar = view.priceCar
+        yearCar = view.yearCar
+        buttonBackFullPhoto = view.buttonBackFullPhoto
+        buttonBackFullPhoto?.setOnClickListener { Objects.requireNonNull(fragmentManager)?.popBackStack() }
+    }
+
+    override fun setDataToViews() {
+
+        pagerFullSize?.adapter =
+            PhotoFullSizeAdapter(childFragmentManager, photoList)
+        pagerFullSize!!.currentItem = viewPagerPosition
+        nameCar!!.text = name
+        yearCar!!.text = year
+        priceCar!!.text = price
+    }
 
 }
