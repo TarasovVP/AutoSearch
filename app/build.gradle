@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 androidExtensions {
     experimental = true
@@ -11,8 +12,9 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.vptarasov.autosearch"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -51,12 +53,12 @@ dependencies {
     //api
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'org.jsoup:jsoup:1.11.3'
 
     //rx
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
@@ -81,4 +83,10 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:2.20"
     implementation 'javax.annotation:jsr250-api:1.0'
     implementation 'javax.inject:javax.inject:1'
+
+    //firebase
+    implementation 'com.google.firebase:firebase-core:17.0.1'
+    implementation 'com.google.firebase:firebase-database:18.0.0'
+    implementation 'com.google.firebase:firebase-firestore:20.1.0'
 }
+

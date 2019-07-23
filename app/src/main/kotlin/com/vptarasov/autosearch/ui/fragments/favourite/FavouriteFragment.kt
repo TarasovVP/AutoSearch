@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vptarasov.autosearch.App
-import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.database.HelperFactory
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
@@ -23,12 +22,12 @@ import java.sql.SQLException
 import java.util.*
 import javax.inject.Inject
 
+
+
 class FavouriteFragment : Fragment(), FavouriteContract.View {
 
     private var cars: List<Car>? = null
     private var adapter: FavouriteAdapter? = null
-
-
     private var recyclerView: RecyclerView? = null
     private var noFoundText: TextView? = null
 
@@ -41,7 +40,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_favourite_list, container, false)
+        val view = inflater.inflate(com.vptarasov.autosearch.R.layout.fragment_favourite_list, container, false)
         initView(view)
         return view
     }
@@ -61,11 +60,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
         recyclerView = view.recyclerViewFavourite
         noFoundText = view.noFoundText
 
-        try {
-            cars = HelperFactory.helper?.getFavoritesDao()?.loadAll()
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
+        cars = presenter.loadFavouriteCars()
 
         if (cars != null) {
             if (cars!!.isNotEmpty()) {
@@ -79,6 +74,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
 
         }
     }
+
     @SuppressLint("SetTextI18n")
     override fun initAdapter() {
 
@@ -91,7 +87,6 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = adapter
     }
-
 
 
     override fun onItemClick(car: Car) {
@@ -109,9 +104,9 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
             Toast.makeText(
                 context, App.instance?.getString(
                     if (car.isBookmarked())
-                        R.string.add_favor
+                        com.vptarasov.autosearch.R.string.add_favor
                     else
-                        R.string.delete_favor
+                        com.vptarasov.autosearch.R.string.delete_favor
                 ), Toast.LENGTH_SHORT
             ).show()
             adapter?.updateFavIcon(car)
@@ -144,6 +139,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
 
         return bookmarked
     }
+
     private fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()
             .fragmentModule(FragmentModule())

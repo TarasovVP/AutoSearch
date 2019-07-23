@@ -2,6 +2,7 @@ package com.vptarasov.autosearch
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
+import com.vptarasov.autosearch.ui.fragments.favourite.FavouritePresenter
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,5 +19,13 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
         assertEquals("com.vptarasov.autosearch", appContext.packageName)
+    }
+    @Test
+    fun loadFavouriteCars() {
+        val favouritePresenter = FavouritePresenter()
+
+        val cars = favouritePresenter.loadFavouriteCars()
+        assertEquals(3, cars?.size)
+
     }
 }

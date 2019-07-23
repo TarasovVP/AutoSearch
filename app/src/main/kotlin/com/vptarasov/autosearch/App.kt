@@ -17,8 +17,9 @@ class App : Application() {
         instance = this
         setup()
         HelperFactory.setHelper(applicationContext)
+
     }
-    fun setup() {
+    private fun setup() {
         component = DaggerAppComponent.builder()
             .appModule(AppModule(this)).build()
         component.inject(this)

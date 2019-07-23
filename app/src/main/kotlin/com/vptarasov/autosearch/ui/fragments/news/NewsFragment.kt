@@ -1,13 +1,17 @@
 package com.vptarasov.autosearch.ui.fragments.news
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.TextView
+import androidx.constraintlayout.widget.Constraints.TAG
 import androidx.fragment.app.Fragment
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
@@ -22,6 +26,8 @@ class NewsFragment : Fragment(), NewsContract.View {
     private lateinit var newsTitle: TextView
     private lateinit var webView: WebView
     private lateinit var buttonBackNews: Button
+
+    private lateinit var database: DatabaseReference
 
     @Inject
     lateinit var presenter: NewsContract.Presenter
@@ -46,6 +52,7 @@ class NewsFragment : Fragment(), NewsContract.View {
             url = args.getString("newsUrl")
             presenter.loadNews(url!!)
         }
+        writeNewsInFirestore("TitleTest", "TextTest", "https:test", "PhotoTest")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,5 +84,18 @@ class NewsFragment : Fragment(), NewsContract.View {
     override fun setDataToViews(news: News) {
         newsTitle.text = news.title
         webView.loadDataWithBaseURL(Constants.NEWS_URL, news.text, "text/html", "UTF-8", null)
+    }
+
+    private fun writeNewsInFirestore(title: String, text: String, url: String, photo: String){
+        val db = FirebaseFirestore.getInstance()
+        val news = News(title, text, url, photo)
+        db.collection("news")
+            .add(news)
+            .addOnSuccessListener { documentReference ->
+                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding document", e)
+            }
     }
 }

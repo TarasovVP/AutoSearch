@@ -13,5 +13,7 @@ class FavouriteContract {
         fun onLastFavoriteRemoved()
     }
 
-    interface Presenter : AppContract.Presenter<View>
+    interface Presenter : AppContract.Presenter<View>{
+        fun loadFavouriteCars(): List<Car>?
+    }
 }

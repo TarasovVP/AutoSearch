@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "135615530486",
+    "firebase_url": "https://autosearch-f9aa8.firebaseio.com",
+    "project_id": "autosearch-f9aa8",
+    "storage_bucket": "autosearch-f9aa8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135615530486:android:0cbc7bef25614483",
+        "android_client_info": {
+          "package_name": "com.vptarasov.autosearch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "135615530486-a880ho0ei3bqma1a80p2l9qej941d41f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ_Zgy-ZERqpqgrMLuClEHFyKQkBZEr7c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "135615530486-a880ho0ei3bqma1a80p2l9qej941d41f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

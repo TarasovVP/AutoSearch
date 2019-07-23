@@ -1,5 +1,7 @@
 package com.vptarasov.autosearch.ui.fragments.favourite
 
+import com.vptarasov.autosearch.database.HelperFactory
+import com.vptarasov.autosearch.model.Car
 import io.reactivex.disposables.CompositeDisposable
 
 class FavouritePresenter : FavouriteContract.Presenter {
@@ -19,5 +21,8 @@ class FavouritePresenter : FavouriteContract.Presenter {
         subscriptions.clear()
     }
 
+    override fun loadFavouriteCars(): List<Car>? {
+        return HelperFactory.helper?.getFavoritesDao()?.loadAll()
+    }
 
 }
