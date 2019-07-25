@@ -22,6 +22,7 @@ class HTMLParser {
                 newsPreview.text = element.select("div[style=\"margin-top:5px;\"]")[i].text()
                 newsPreview.url = element.select("a")[i].attr("href")
                 newsPreview.photo = Constants.NEWS_URL + element.select("img")[i].attr("src")
+                newsPreview.id = newsPreview.run { url?.replace("/", "") }!!.replace(".", "").replace("-", "").replace("_", "")
                 newsPreviews.add(newsPreview)
             }
         } catch (e: Exception) {

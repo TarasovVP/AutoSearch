@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.database.HelperFactory
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
@@ -19,9 +20,7 @@ import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.util.FragmentUtil
 import kotlinx.android.synthetic.main.fragment_favourite_list.view.*
 import java.sql.SQLException
-import java.util.*
 import javax.inject.Inject
-
 
 
 class FavouriteFragment : Fragment(), FavouriteContract.View {
@@ -31,12 +30,16 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
     private var recyclerView: RecyclerView? = null
     private var noFoundText: TextView? = null
 
+    private var firestore: FirebaseFirestore? = null
+    private lateinit var carsFromFirebase: ArrayList<Car>
+
     @Inject
     lateinit var presenter: FavouriteContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependency()
+        initFirestore()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,10 +64,12 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
         noFoundText = view.noFoundText
 
         cars = presenter.loadFavouriteCars()
+        carsFromFirebase = ArrayList()
 
         if (cars != null) {
             if (cars!!.isNotEmpty()) {
-                initAdapter()
+                putCarsToFireBase(cars!!)
+
 
             } else {
                 noFoundText?.visibility = View.VISIBLE
@@ -73,6 +78,9 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
             noFoundText?.visibility = View.VISIBLE
 
         }
+
+        getCarsFromFirebase()
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -82,7 +90,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
             car.setBookmarked(isCarBookmarked(car))
         }
 
-        adapter = FavouriteAdapter(cars as ArrayList<Car>)
+        adapter = FavouriteAdapter(carsFromFirebase as ArrayList<Car>)
         adapter?.setListener(this)
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = adapter
@@ -146,6 +154,32 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
             .build()
 
         fragmentComponent.inject(this)
+    }
+
+    private fun initFirestore() {
+        firestore = FirebaseFirestore.getInstance()
+    }
+
+    private fun putCarsToFireBase(carsList: List<Car>) {
+        val cars = firestore?.collection("car")
+        for (car in carsList) {
+            cars!!.document(car.urlToId()).set(car)
+        }
+    }
+    private fun getCarsFromFirebase(){
+        firestore!!.collection("car")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val car = document.toObject(Car::class.java)
+                    carsFromFirebase.add(car)
+
+                }
+                initAdapter()
+            }
+            .addOnFailureListener {
+
+            }
     }
 
 }

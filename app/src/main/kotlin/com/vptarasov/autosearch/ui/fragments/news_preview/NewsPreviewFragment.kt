@@ -14,7 +14,6 @@ import com.vptarasov.autosearch.model.News
 import com.vptarasov.autosearch.ui.fragments.news.NewsFragment
 import com.vptarasov.autosearch.util.FragmentUtil
 import kotlinx.android.synthetic.main.fragment_news_preview.view.*
-import java.util.*
 import javax.inject.Inject
 
 class NewsPreviewFragment : Fragment(), NewsPreviewContract.View {
@@ -38,6 +37,7 @@ class NewsPreviewFragment : Fragment(), NewsPreviewContract.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //presenter.getNewsFromFirebase()
         presenter.loadNewsPreview()
     }
 
@@ -74,4 +74,9 @@ class NewsPreviewFragment : Fragment(), NewsPreviewContract.View {
             .build()
         fragmentComponent.inject(this)
     }
-}
+
+
+    }
+
+
+
