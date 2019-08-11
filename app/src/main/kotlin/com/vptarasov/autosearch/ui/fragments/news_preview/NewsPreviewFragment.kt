@@ -37,8 +37,7 @@ class NewsPreviewFragment : Fragment(), NewsPreviewContract.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //presenter.getNewsFromFirebase()
-        presenter.loadNewsPreview()
+        presenter.getNewsFromFirebase()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,7 +60,8 @@ class NewsPreviewFragment : Fragment(), NewsPreviewContract.View {
 
     override fun onItemClick(news: News) {
         val bundle = Bundle()
-        bundle.putString("newsUrl", news.url)
+        bundle.putString("newsTitle", news.title)
+        bundle.putString("newsFullText", news.fullText)
         val newsFragment = NewsFragment()
         newsFragment.arguments = bundle
         fragmentManager.let { FragmentUtil.replaceFragment(it, newsFragment, true) }

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.database.HelperFactory
@@ -90,7 +91,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
             car.setBookmarked(isCarBookmarked(car))
         }
 
-        adapter = FavouriteAdapter(carsFromFirebase as ArrayList<Car>)
+        adapter = FavouriteAdapter(carsFromFirebase)
         adapter?.setListener(this)
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = adapter
@@ -117,7 +118,6 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
                         com.vptarasov.autosearch.R.string.delete_favor
                 ), Toast.LENGTH_SHORT
             ).show()
-            adapter?.updateFavIcon(car)
 
             val carsFromAdapter = adapter!!.cars
             for (i in carsFromAdapter.indices) {
@@ -125,6 +125,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
                     adapter?.notifyItemRemoved(i)
                     adapter?.notifyItemRangeChanged(i, adapter!!.itemCount)
                     adapter?.cars?.removeAt(i)
+                    break
                 }
             }
         } catch (e: SQLException) {
@@ -167,6 +168,9 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
         }
     }
     private fun getCarsFromFirebase(){
+        val userId = FirebaseAuth.getInstance()
+            .currentUser?.uid
+
         firestore!!.collection("car")
             .get()
             .addOnSuccessListener { result ->

@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
-import com.vptarasov.autosearch.model.News
 import com.vptarasov.autosearch.util.Constants
 import kotlinx.android.synthetic.main.fragment_news.view.*
 import java.util.*
@@ -40,13 +39,16 @@ class NewsFragment : Fragment(), NewsContract.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val url: String?
+        val title: String?
+        val text: String?
         val args = arguments
         if (args != null) {
-            url = args.getString("newsUrl")
-            presenter.loadNews(url!!)
-
+            title = args.getString("newsTitle")
+            text = args.getString("newsFullText")
+            newsTitle.text = title
+            webView.loadDataWithBaseURL(Constants.NEWS_URL, text, "text/html", "UTF-8", null)
         }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,14 +76,5 @@ class NewsFragment : Fragment(), NewsContract.View {
         buttonBackNews = view.buttonBackNews
         buttonBackNews.setOnClickListener { Objects.requireNonNull(fragmentManager)?.popBackStack() }
     }
-
-    override fun setDataToViews(news: News) {
-        newsTitle.text = news.title
-        webView.loadDataWithBaseURL(Constants.NEWS_URL, news.text, "text/html", "UTF-8", null)
-    }
-    fun createDataBaseNews(){
-
-    }
-
 
 }

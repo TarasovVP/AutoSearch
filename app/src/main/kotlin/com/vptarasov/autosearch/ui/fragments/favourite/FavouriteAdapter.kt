@@ -46,7 +46,7 @@ class FavouriteAdapter(val cars: ArrayList<Car>) : RecyclerView.Adapter<ViewHold
             .load(car.photo)
             .placeholder(R.drawable.placeholder)
             .into(holder.photoCar)
-        holder.favourite?.setBackgroundResource(if (car.isBookmarked()) R.drawable.favouritechecked else R.drawable.favourite)
+        holder.favourite?.setBackgroundResource(R.drawable.favouritechecked )
         if (listener != null) {
             holder.itemView.tag = car
             holder.itemView.setOnClickListener(this@FavouriteAdapter)
@@ -58,15 +58,6 @@ class FavouriteAdapter(val cars: ArrayList<Car>) : RecyclerView.Adapter<ViewHold
 
     fun setListener(listener: FavouriteContract.View) {
         this.listener = listener
-    }
-
-    fun updateFavIcon(car: Car) {
-        for (i in cars.indices) {
-            if (car.id.equals(cars[i].id)) {
-                notifyItemChanged(i)
-                break
-            }
-        }
     }
 
     override fun onClick(view: View) {
