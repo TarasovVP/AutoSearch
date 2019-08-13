@@ -6,14 +6,13 @@ import com.vptarasov.autosearch.ui.AppContract
 class FavouriteContract {
 
     interface View : AppContract.View {
-        fun initView(view: android.view.View)
-        fun initAdapter()
+        fun initAdapter(cars: ArrayList<Car>)
         fun onItemClick(car: Car)
         fun onFavoriteClick(car: Car)
         fun onLastFavoriteRemoved()
     }
 
     interface Presenter : AppContract.Presenter<View>{
-        fun loadFavouriteCars(): List<Car>?
+        fun loadFavouriteCars()
     }
 }

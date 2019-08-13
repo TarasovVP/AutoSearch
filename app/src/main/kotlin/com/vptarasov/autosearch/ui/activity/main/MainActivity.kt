@@ -39,9 +39,6 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     private var userNameTV: TextView? = null
 
     private lateinit var searchFragment: Fragment
-    private lateinit var carsListFragment: Fragment
-    private lateinit var favouriteListFragment: Fragment
-    private lateinit var newsPreviewFragment: Fragment
     private lateinit var searchData: SearchData
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,13 +46,10 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
         setContentView(R.layout.activity_main)
         injectDependency()
 
+        searchFragment = SearchFragment()
+
         if (FirebaseAuth.getInstance().currentUser == null) {
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .build(),
-                code
-            )
+            signInAuth()
         } else {
            val name = FirebaseAuth.getInstance()
                 .currentUser
@@ -66,7 +60,7 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
                 Toast.LENGTH_LONG
             )
                 .show()
-
+            showCarsListFragment()
         }
 
         val toolbar  = toolbar
@@ -82,18 +76,12 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
                             Toast.LENGTH_LONG
                         )
                             .show()
-
-                        finish()
+                        signInAuth()
                     }
             }
 
             false
         }
-
-        searchFragment = SearchFragment()
-        carsListFragment = CarsListFragment()
-        favouriteListFragment = FavouriteFragment()
-        newsPreviewFragment = NewsPreviewFragment()
 
         userNameTV = userName
         userNameTV?.text = FirebaseAuth.getInstance()
@@ -133,6 +121,7 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
                 userNameTV?.text = FirebaseAuth.getInstance()
                     .currentUser
                     ?.displayName
+                showCarsListFragment()
             } else {
                 Toast.makeText(
                     this,
@@ -203,7 +192,7 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     }
 
     override fun showCarsListFragment() {
-        FragmentUtil.replaceFragment(supportFragmentManager, carsListFragment, false)
+        FragmentUtil.replaceFragment(supportFragmentManager, CarsListFragment(), false)
     }
 
     override fun showSearchFragment() {
@@ -214,12 +203,20 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     }
 
     override fun showFavouriteListFragment() {
-        FragmentUtil.replaceFragment(supportFragmentManager, favouriteListFragment, true)
+        FragmentUtil.replaceFragment(supportFragmentManager, FavouriteFragment(), true)
     }
 
     override fun showNewsPreviewFragment() {
-        FragmentUtil.replaceFragment(supportFragmentManager, newsPreviewFragment, true)
+        FragmentUtil.replaceFragment(supportFragmentManager, NewsPreviewFragment(), true)
     }
 
+    private fun signInAuth(){
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .build(),
+            code
+        )
+    }
 
 }

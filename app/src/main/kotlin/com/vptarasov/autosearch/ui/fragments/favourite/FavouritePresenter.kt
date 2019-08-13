@@ -1,6 +1,7 @@
 package com.vptarasov.autosearch.ui.fragments.favourite
 
-import com.vptarasov.autosearch.database.HelperFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.model.Car
 import io.reactivex.disposables.CompositeDisposable
 
@@ -21,8 +22,25 @@ class FavouritePresenter : FavouriteContract.Presenter {
         subscriptions.clear()
     }
 
-    override fun loadFavouriteCars(): List<Car>? {
-        return HelperFactory.helper?.getFavoritesDao()?.loadAll()
+    override fun loadFavouriteCars() {
+        val userId = FirebaseAuth.getInstance()
+            .currentUser?.uid
+
+        FirebaseFirestore.getInstance().collection("car").whereEqualTo("user", userId)
+            .get()
+            .addOnSuccessListener { result ->
+                val cars: ArrayList<Car> = ArrayList()
+                for (document in result) {
+                    val car = document.toObject(Car::class.java)
+                    cars.add(car)
+
+                }
+                view.initAdapter(cars)
+            }
+            .addOnFailureListener {
+
+            }
     }
+
 
 }

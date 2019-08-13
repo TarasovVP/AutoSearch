@@ -11,9 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.database.HelperFactory
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.model.Car
@@ -23,7 +24,6 @@ import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.util.FragmentUtil
 import kotlinx.android.synthetic.main.fragment_cars_list.view.*
 import kotlinx.android.synthetic.main.list_pages.view.*
-import java.sql.SQLException
 import javax.inject.Inject
 
 class CarsListFragment : BaseFragment(), CarsListContract.View {
@@ -116,10 +116,6 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
 
     @SuppressLint("SetTextI18n")
     override fun initAdapter(cars: ArrayList<Car>, lastPage: Int) {
-        for (car in cars) {
-            car.setBookmarked(isCarBookmarked(car))
-        }
-
         adapter = CarsListAdapter(cars)
         adapter?.setListener(this)
         recyclerViewCar.layoutManager = LinearLayoutManager(context)
@@ -150,35 +146,38 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
     }
 
     override fun onFavoriteClick(car: Car) {
-        try {
-            HelperFactory.helper?.getFavoritesDao()?.switchBookmarkedStatus(car)
-            car.setBookmarked(isCarBookmarked(car))
-            Toast.makeText(
-                context, App.instance?.getString(
-                    if (car.isBookmarked())
-                        R.string.add_favor
-                    else
-                        R.string.delete_favor
-                ), Toast.LENGTH_SHORT
-            ).show()
-            adapter?.updateFavIcon(car)
+            val doc = FirebaseFirestore.getInstance().collection("car")
+                .document(car.urlToId() + FirebaseAuth.getInstance().currentUser?.uid)
 
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
+            doc
+                .get()
+                .addOnCompleteListener { task ->
 
+                    if (task.isSuccessful) {
+                        val document = task.result
+                        if (document!!.exists()) {
+                            doc.delete()
+                            car.setBookmarked(false)
+                        } else {
+                            car.setBookmarked(true)
+                            doc.set(car)
+                        }
+                    } else {
+                        Toast.makeText(App.instance, "Ошибка", Toast.LENGTH_LONG).show()
+                    }
+                    Toast.makeText(
+                        context, App.instance?.getString(
+                            if (car.isBookmarked())
+                                R.string.add_favor
+                            else
+                                R.string.delete_favor
+                        ), Toast.LENGTH_SHORT
+                    ).show()
+                    adapter?.updateFavIcon(car)
+
+                }
     }
 
-    private fun isCarBookmarked(car: Car): Boolean {
-        var bookmarked = false
-        try {
-            bookmarked = HelperFactory.helper?.getFavoritesDao()!!.exists(car)
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
-
-        return bookmarked
-    }
 
     private fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()

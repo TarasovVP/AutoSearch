@@ -18,5 +18,6 @@ class CarsListContract {
 
     interface Presenter : AppContract.Presenter<View>{
         fun loadCars(queryDetails: QueryDetails?, page: Int)
+        fun loadFavouriteCars()
     }
 }

@@ -44,6 +44,6 @@
     <string name="model">Модель</string>
     <string name="city">Город</string>
     <string name="usd">USD</string>
-    <string name="user">user</string>
+    <string name="user">Пользователь</string>
     <string name="sign_out">Отписаться</string>
 </resources>
