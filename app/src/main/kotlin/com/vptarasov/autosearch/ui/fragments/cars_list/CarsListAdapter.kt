@@ -68,7 +68,7 @@ class CarsListAdapter(private val cars: ArrayList<Car>) : RecyclerView.Adapter<V
     fun updateFavIcon(car: Car) {
 
         for (i in cars.indices) {
-            if (car.id.equals(cars[i].id)) {
+            if (car.urlToId() == cars[i].urlToId()) {
                 notifyItemChanged(i)
                 break
             }

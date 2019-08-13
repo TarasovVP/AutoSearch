@@ -10,23 +10,22 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
-import com.vptarasov.autosearch.database.HelperFactory
+import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.util.FragmentUtil
 import kotlinx.android.synthetic.main.fragment_favourite_list.view.*
-import java.sql.SQLException
-import java.util.*
 import javax.inject.Inject
-
 
 
 class FavouriteFragment : Fragment(), FavouriteContract.View {
 
-    private var cars: List<Car>? = null
+
     private var adapter: FavouriteAdapter? = null
     private var recyclerView: RecyclerView? = null
     private var noFoundText: TextView? = null
@@ -40,8 +39,10 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(com.vptarasov.autosearch.R.layout.fragment_favourite_list, container, false)
-        initView(view)
+        val view = inflater.inflate(R.layout.fragment_favourite_list, container, false)
+        recyclerView = view.recyclerViewFavourite
+        noFoundText = view.noFoundText
+        presenter.loadFavouriteCars()
         return view
     }
 
@@ -56,36 +57,16 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
         presenter.unsubscribe()
     }
 
-    override fun initView(view: View) {
-        recyclerView = view.recyclerViewFavourite
-        noFoundText = view.noFoundText
-
-        cars = presenter.loadFavouriteCars()
-
-        if (cars != null) {
-            if (cars!!.isNotEmpty()) {
-                initAdapter()
-
-            } else {
-                noFoundText?.visibility = View.VISIBLE
-            }
-        } else {
-            noFoundText?.visibility = View.VISIBLE
-
-        }
-    }
-
     @SuppressLint("SetTextI18n")
-    override fun initAdapter() {
-
-        for (car in cars!!) {
-            car.setBookmarked(isCarBookmarked(car))
+    override fun initAdapter(cars: ArrayList<Car>) {
+        if (cars.isNullOrEmpty()) {
+            noFoundText?.visibility = View.VISIBLE
+        } else {
+            adapter = FavouriteAdapter(cars)
+            adapter?.setListener(this)
+            recyclerView?.layoutManager = LinearLayoutManager(context)
+            recyclerView?.adapter = adapter
         }
-
-        adapter = FavouriteAdapter(cars as ArrayList<Car>)
-        adapter?.setListener(this)
-        recyclerView?.layoutManager = LinearLayoutManager(context)
-        recyclerView?.adapter = adapter
     }
 
 
@@ -98,18 +79,33 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
     }
 
     override fun onFavoriteClick(car: Car) {
-        try {
-            HelperFactory.helper?.getFavoritesDao()?.switchBookmarkedStatus(car)
-            car.setBookmarked(isCarBookmarked(car))
-            Toast.makeText(
-                context, App.instance?.getString(
-                    if (car.isBookmarked())
-                        com.vptarasov.autosearch.R.string.add_favor
-                    else
-                        com.vptarasov.autosearch.R.string.delete_favor
-                ), Toast.LENGTH_SHORT
-            ).show()
-            adapter?.updateFavIcon(car)
+        val doc = FirebaseFirestore.getInstance().collection("car")
+            .document(car.urlToId() + FirebaseAuth.getInstance().currentUser?.uid)
+
+        doc
+        .get()
+            .addOnCompleteListener { task ->
+
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document!!.exists()) {
+                        doc.delete()
+                        car.setBookmarked(false)
+                    } else {
+                        car.setBookmarked(true)
+                        doc.set(car)
+                    }
+                } else {
+                    Toast.makeText(App.instance, "Ошибка", Toast.LENGTH_LONG).show()
+                }
+                Toast.makeText(
+                    context, App.instance?.getString(
+                        if (car.isBookmarked())
+                            R.string.add_favor
+                        else
+                            R.string.delete_favor
+                    ), Toast.LENGTH_SHORT
+                ).show()
 
             val carsFromAdapter = adapter!!.cars
             for (i in carsFromAdapter.indices) {
@@ -117,27 +113,15 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
                     adapter?.notifyItemRemoved(i)
                     adapter?.notifyItemRangeChanged(i, adapter!!.itemCount)
                     adapter?.cars?.removeAt(i)
+                    break
                 }
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
         }
 
     }
 
     override fun onLastFavoriteRemoved() {
         noFoundText?.visibility = View.VISIBLE
-    }
-
-    private fun isCarBookmarked(car: Car): Boolean {
-        var bookmarked = false
-        try {
-            bookmarked = HelperFactory.helper?.getFavoritesDao()!!.exists(car)
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
-
-        return bookmarked
     }
 
     private fun injectDependency() {

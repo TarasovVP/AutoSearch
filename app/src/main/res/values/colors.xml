@@ -5,6 +5,7 @@
     <color name="colorAccent">#008ecc</color>
 
     <color name="colorError">#800000</color>
+    <color name="title">#ffffff</color>
 
     <color name="colorDivider">#40000000</color>
     <color name="item_car_head">#ffc9cc</color>

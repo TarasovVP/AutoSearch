@@ -12,6 +12,6 @@ class NewsPreviewContract {
     }
 
     interface Presenter: AppContract.Presenter<View>{
-        fun loadNewsPreview()
+        fun getNewsFromFirebase()
     }
 }

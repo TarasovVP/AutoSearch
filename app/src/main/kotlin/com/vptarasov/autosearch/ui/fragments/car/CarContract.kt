@@ -12,5 +12,6 @@ class CarContract {
 
     interface Presenter: AppContract.Presenter<View>{
         fun loadCar(url: String?)
+        fun loadFavouriteCars(car: Car)
     }
 }

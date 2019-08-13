@@ -1,5 +1,6 @@
 package com.vptarasov.autosearch.api
 
+import com.google.firebase.auth.FirebaseAuth
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.model.*
@@ -22,6 +23,7 @@ class HTMLParser {
                 newsPreview.text = element.select("div[style=\"margin-top:5px;\"]")[i].text()
                 newsPreview.url = element.select("a")[i].attr("href")
                 newsPreview.photo = Constants.NEWS_URL + element.select("img")[i].attr("src")
+                newsPreview.id = newsPreview.run { url?.replace("/", "") }!!.replace(".", "").replace("-", "").replace("_", "")
                 newsPreviews.add(newsPreview)
             }
         } catch (e: Exception) {
@@ -80,6 +82,8 @@ class HTMLParser {
                 carsList.url = line.select("a").attr("href")
                 carsList.date = line.select("span").text()
 
+                carsList.user = FirebaseAuth.getInstance().currentUser?.uid
+
                 carsLists.add(carsList)
             }
         } catch (e: Exception) {
@@ -133,7 +137,6 @@ class HTMLParser {
             car.photoSeller = Constants.IMG_URL + fotocol.select("img").attr("src")
             car.photo = Constants.IMG_URL + fotocol.select("div#big_foto.spinner2").select("a").attr("href")
             car.photoList = getPhotoList(element)
-
 
         } catch (e: Exception) {
             e.printStackTrace()
