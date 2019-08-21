@@ -3,7 +3,10 @@ package com.vptarasov.autosearch.api
 import com.google.firebase.auth.FirebaseAuth
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.model.*
+import com.vptarasov.autosearch.model.Car
+import com.vptarasov.autosearch.model.City
+import com.vptarasov.autosearch.model.Model
+import com.vptarasov.autosearch.model.SearchData
 import com.vptarasov.autosearch.util.Constants
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -11,43 +14,6 @@ import org.jsoup.select.Elements
 import java.util.*
 
 class HTMLParser {
-
-
-    fun getNewsPreviews(html: String): ArrayList<News> {
-        val newsPreviews = ArrayList<News>()
-        val element = Jsoup.parse(html).getElementsByClass("green_content")
-        try {
-            for (i in 0 until element.select("a").size) {
-                val newsPreview = News()
-                newsPreview.title = element.select("a")[i].text()
-                newsPreview.text = element.select("div[style=\"margin-top:5px;\"]")[i].text()
-                newsPreview.url = element.select("a")[i].attr("href")
-                newsPreview.photo = Constants.NEWS_URL + element.select("img")[i].attr("src")
-                newsPreview.id = newsPreview.run { url?.replace("/", "") }!!.replace(".", "").replace("-", "").replace("_", "")
-                newsPreviews.add(newsPreview)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return newsPreviews
-    }
-
-    fun getNews(html: String): News {
-        val news = News()
-        val element = Jsoup.parse(html).select("td.content")
-        try {
-            news.title = element.select("h1").text()
-            val content = element.select("div.green_content")
-            news.text = content.toString().replace("href".toRegex(), "").replace("Источник: ".toRegex(), "")
-                .replace("http://www.autonews.ru".toRegex(), "")
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return news
-    }
 
     fun getCarList(html: String): ArrayList<Car> {
         val carsLists = ArrayList<Car>()
@@ -137,6 +103,7 @@ class HTMLParser {
             car.photoSeller = Constants.IMG_URL + fotocol.select("img").attr("src")
             car.photo = Constants.IMG_URL + fotocol.select("div#big_foto.spinner2").select("a").attr("href")
             car.photoList = getPhotoList(element)
+            car.user = FirebaseAuth.getInstance().currentUser?.uid
 
         } catch (e: Exception) {
             e.printStackTrace()

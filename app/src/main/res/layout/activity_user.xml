@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="10dp">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_user_text"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:id="@+id/cardViewEdit"
+            android:layout_margin="5dp"
+            android:layout_gravity="center_horizontal"
+            app:cardCornerRadius="58dp"
+            app:cardElevation="5dp"
+            tools:ignore="UnusedAttribute">
+
+        <ImageView
+                android:id="@+id/userPhotoedit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_person"
+                tools:ignore="ContentDescription"/>
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+            android:id="@+id/photoUrlInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/photo_user_edit"
+            android:inputType="textUri"/>
+
+
+    <EditText
+            android:id="@+id/userNameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/user_name_edit"/>
+
+    <EditText
+            android:id="@+id/emailInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/email_user_edit"
+            android:inputType="textEmailAddress"/>
+
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/save"/>
+
+</LinearLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -29,6 +30,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
     private var adapter: FavouriteAdapter? = null
     private var recyclerView: RecyclerView? = null
     private var noFoundText: TextView? = null
+    private lateinit var progressBar: ProgressBar
 
     @Inject
     lateinit var presenter: FavouriteContract.Presenter
@@ -42,7 +44,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
         val view = inflater.inflate(R.layout.fragment_favourite_list, container, false)
         recyclerView = view.recyclerViewFavourite
         noFoundText = view.noFoundText
-        presenter.loadFavouriteCars()
+        progressBar = view.progressBarFavourite
         return view
     }
 
@@ -50,6 +52,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
         presenter.subscribe()
+        presenter.loadFavouriteCars()
     }
 
     override fun onDestroyView() {
@@ -122,6 +125,14 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
 
     override fun onLastFavoriteRemoved() {
         noFoundText?.visibility = View.VISIBLE
+    }
+
+    override fun showProgress() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        progressBar.visibility = View.GONE
     }
 
     private fun injectDependency() {

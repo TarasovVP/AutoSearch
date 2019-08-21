@@ -23,6 +23,7 @@ class FavouritePresenter : FavouriteContract.Presenter {
     }
 
     override fun loadFavouriteCars() {
+        view.showProgress()
         val userId = FirebaseAuth.getInstance()
             .currentUser?.uid
 
@@ -36,9 +37,10 @@ class FavouritePresenter : FavouriteContract.Presenter {
 
                 }
                 view.initAdapter(cars)
+                view.hideProgress()
             }
             .addOnFailureListener {
-
+                view.hideProgress()
             }
     }
 

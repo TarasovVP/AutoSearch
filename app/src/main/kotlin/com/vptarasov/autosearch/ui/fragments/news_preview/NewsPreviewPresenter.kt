@@ -21,6 +21,7 @@ class NewsPreviewPresenter : NewsPreviewContract.Presenter {
     }
 
     override fun getNewsFromFirebase(){
+        view.showProgress()
         val firestore = FirebaseFirestore.getInstance()
         firestore.collection("news")
             .get()
@@ -31,8 +32,10 @@ class NewsPreviewPresenter : NewsPreviewContract.Presenter {
                     news.add(newsSingle)
                 }
                 view.initAdapter(news)
+                view.hideProgress()
             }
             .addOnFailureListener {
+                view.hideProgress()
             }
     }
 }

@@ -9,6 +9,8 @@ class NewsPreviewContract {
     interface View: AppContract.View{
         fun initAdapter(news: ArrayList<News>)
         fun onItemClick(news: News)
+        fun showProgress()
+        fun hideProgress()
     }
 
     interface Presenter: AppContract.Presenter<View>{

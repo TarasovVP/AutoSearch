@@ -45,5 +45,17 @@
     <string name="city">Город</string>
     <string name="usd">USD</string>
     <string name="user">Пользователь</string>
-    <string name="sign_out">Отписаться</string>
+    <string name="change_user">Сменить пользователя</string>
+    <string name="edit_user">Редактировать пользователя</string>
+    <string name="edit_user_text">Редактирование профиля</string>
+    <string name="user_name_edit">Введите имя профиля</string>
+    <string name="photo_user_edit">Введите ссылку на фото профиля</string>
+    <string name="title_activity_gallery">GalleryActivity</string>
+    <string name="email_user_edit">Введите Ваш email</string>
+    <string name="phone_user_edit">Введите Ваш номер телефона</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save">Сохранить</string>
+    <string name="title_activity_user">UserActivity</string>
 </resources>

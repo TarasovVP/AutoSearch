@@ -14,6 +14,8 @@ class CarsListContract {
         fun onItemClick(car: Car)
         fun onFavoriteClick(car: Car)
         fun getLastPage(lastPage: Int)
+        fun showProgress()
+        fun hideProgress()
     }
 
     interface Presenter : AppContract.Presenter<View>{

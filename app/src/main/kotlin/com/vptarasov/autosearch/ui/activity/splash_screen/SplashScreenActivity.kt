@@ -17,13 +17,13 @@ class SplashScreenActivity : AppCompatActivity(), SplashScreenContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_splash_screen)
         injectDependency()
         presenter.attach(this)
     }
 
     override fun showLoadingFragment() {
-        FragmentUtil.replaceFragment(supportFragmentManager,
+        FragmentUtil.replaceFragmentFromActivity(supportFragmentManager,
             LoadingFragment(), false)
     }
 

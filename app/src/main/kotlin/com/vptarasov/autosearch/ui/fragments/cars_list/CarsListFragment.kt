@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -19,6 +16,7 @@ import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.model.QueryDetails
+import com.vptarasov.autosearch.model.User
 import com.vptarasov.autosearch.ui.fragments.base.BaseFragment
 import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.util.FragmentUtil
@@ -38,6 +36,7 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
     private lateinit var btnLeft: Button
     private lateinit var tvPage: TextView
     private lateinit var searchPaging: RelativeLayout
+    private lateinit var progressBar: ProgressBar
 
     @Inject
     lateinit var presenter: CarsListContract.Presenter
@@ -99,6 +98,7 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
         btnLeft = view.btnLeft
         tvPage = view.tvPage
         searchPaging = view.searchPaging as RelativeLayout
+        progressBar = view.progressBarCarsList
 
         btnRight.setOnClickListener {
             if (page < lastPage) {
@@ -145,39 +145,66 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
 
     }
 
-    override fun onFavoriteClick(car: Car) {
-            val doc = FirebaseFirestore.getInstance().collection("car")
-                .document(car.urlToId() + FirebaseAuth.getInstance().currentUser?.uid)
+ /*   override fun onFavoriteClick(car: Car) {
+        val doc = FirebaseFirestore.getInstance().collection("car")
+            .document(car.urlToId() + FirebaseAuth.getInstance().currentUser?.uid)
 
-            doc
-                .get()
-                .addOnCompleteListener { task ->
+        doc
+            .get()
+            .addOnCompleteListener { task ->
 
-                    if (task.isSuccessful) {
-                        val document = task.result
-                        if (document!!.exists()) {
-                            doc.delete()
-                            car.setBookmarked(false)
-                        } else {
-                            car.setBookmarked(true)
-                            doc.set(car)
-                        }
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document!!.exists()) {
+                        doc.delete()
+                        car.setBookmarked(false)
                     } else {
-                        Toast.makeText(App.instance, "Ошибка", Toast.LENGTH_LONG).show()
+                        car.setBookmarked(true)
+                        doc.set(car)
                     }
-                    Toast.makeText(
-                        context, App.instance?.getString(
-                            if (car.isBookmarked())
-                                R.string.add_favor
-                            else
-                                R.string.delete_favor
-                        ), Toast.LENGTH_SHORT
-                    ).show()
-                    adapter?.updateFavIcon(car)
-
+                } else {
+                    Toast.makeText(App.instance, "Ошибка", Toast.LENGTH_LONG).show()
                 }
+                Toast.makeText(
+                    context, App.instance?.getString(
+                        if (car.isBookmarked())
+                            R.string.add_favor
+                        else
+                            R.string.delete_favor
+                    ), Toast.LENGTH_SHORT
+                ).show()
+                adapter?.updateFavIcon(car)
+
+            }
+    }*/
+
+    override fun onFavoriteClick(car: Car) {
+        val doc = FirebaseFirestore.getInstance().collection("user")
+            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
+
+        doc
+            .get()
+            .addOnCompleteListener { task ->
+
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document!!.exists()) {
+                        doc.collection("cars").document(car.urlToId())
+
+                    }
+                } else {
+                    Toast.makeText(App.instance, "Ошибка", Toast.LENGTH_LONG).show()
+                }
+            }
     }
 
+    override fun showProgress() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        progressBar.visibility = View.GONE
+    }
 
     private fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()
@@ -185,5 +212,30 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
             .build()
 
         fragmentComponent.inject(this)
+    }
+
+    private fun setCarToUser(car: Car, user: User) {
+        val doc = FirebaseFirestore.getInstance().collection("user").document(user.id)
+
+
+        doc
+            .get()
+            .addOnCompleteListener { task ->
+
+                if (task.isSuccessful) {
+                    val document = task.result
+                    doc.set(car)
+
+
+                    /*val document = task.result
+                    if (document!!.exists()) {
+                        doc.delete()
+                        car.setBookmarked(false)
+                    } else {
+                        car.setBookmarked(true)
+                        doc.set(car)
+                    }*/
+                }
+            }
     }
 }
