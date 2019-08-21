@@ -10,6 +10,8 @@ class FavouriteContract {
         fun onItemClick(car: Car)
         fun onFavoriteClick(car: Car)
         fun onLastFavoriteRemoved()
+        fun showProgress()
+        fun hideProgress()
     }
 
     interface Presenter : AppContract.Presenter<View>{

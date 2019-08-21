@@ -34,7 +34,7 @@ class CarsListPresenter : CarsListContract.Presenter, BaseFragment() {
 
     @SuppressLint("CheckResult")
     override fun loadCars(queryDetails: QueryDetails?, page: Int) {
-        setLoading(true)
+        view.showProgress()
         val subscribe = Api
             .service
             .loadCars(
@@ -74,11 +74,11 @@ class CarsListPresenter : CarsListContract.Presenter, BaseFragment() {
                 } else {
                     showErrorMessage(R.string.nothing_found)
                 }
-                setLoading(false)
+
 
             }, { throwable ->
                 throwable.printStackTrace()
-                setLoading(true)
+
             })
         subscriptions.add(subscribe)
     }
@@ -100,9 +100,10 @@ class CarsListPresenter : CarsListContract.Presenter, BaseFragment() {
                     }
                 }
                 view.initAdapter(cars, lastPage)
+                view.hideProgress()
             }
             .addOnFailureListener {
-
+                view.hideProgress()
             }
     }
 

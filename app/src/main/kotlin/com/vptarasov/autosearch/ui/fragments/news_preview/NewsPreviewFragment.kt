@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ class NewsPreviewFragment : Fragment(), NewsPreviewContract.View {
 
     private lateinit var adapter: NewsPreviewAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
     @Inject
     lateinit var presenter: NewsPreviewContract.Presenter
@@ -32,6 +34,7 @@ class NewsPreviewFragment : Fragment(), NewsPreviewContract.View {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_news_preview, container, false)
         recyclerView = view.recyclerViewNews
+        progressBar = view.progressBarNews
         return view
     }
 
@@ -65,6 +68,13 @@ class NewsPreviewFragment : Fragment(), NewsPreviewContract.View {
         val newsFragment = NewsFragment()
         newsFragment.arguments = bundle
         fragmentManager.let { FragmentUtil.replaceFragment(it, newsFragment, true) }
+    }
+    override fun showProgress() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        progressBar.visibility = View.GONE
     }
 
 

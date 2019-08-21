@@ -24,5 +24,21 @@ object FragmentUtil {
         fTrans.commitAllowingStateLoss()
     }
 
+    fun replaceFragmentFromActivity(
+        manager: FragmentManager?,
+        fragment: Fragment,
+        addToBackStack: Boolean
+    ) {
+        val fTrans: FragmentTransaction = manager!!.beginTransaction()
+        fTrans.replace(R.id.container_splash, fragment)
+        fTrans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        if (addToBackStack) {
+            fTrans.addToBackStack(null)
+        } else {
+            manager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
+        }
+        fTrans.commitAllowingStateLoss()
+    }
+
 }
 
