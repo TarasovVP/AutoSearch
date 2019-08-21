@@ -12,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -46,7 +45,6 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     private var userPhotoIV: ImageView? = null
     private lateinit var toolbarMain: Toolbar
 
-    private lateinit var searchFragment: Fragment
     private lateinit var searchData: SearchData
 
     @SuppressLint("InflateParams")
@@ -56,10 +54,9 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
         injectDependency()
         presenter.attach(this)
 
+        searchData = SearchData()
         checkConnectivity()
-
         initUser()
-
         initView()
 
     }
@@ -125,10 +122,11 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     }
 
     override fun showSearchFragment() {
+        val searchFragment = SearchFragment()
         val bundle = Bundle()
         bundle.putSerializable("searchData", searchData)
         searchFragment.arguments = bundle
-        FragmentUtil.replaceFragment(supportFragmentManager, SearchFragment(), true)
+        FragmentUtil.replaceFragment(supportFragmentManager, searchFragment, true)
     }
 
     override fun showFavouriteListFragment() {
@@ -147,7 +145,10 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     override fun initView() {
 
         val intent = intent
-        searchData = (intent.getSerializableExtra("searchData") as? SearchData)!!
+        if (intent.hasExtra("searchData")) {
+            searchData = (intent.getSerializableExtra("searchData") as? SearchData)!!
+        }
+
 
         setNavigationVisibiltity(true)
         navigation.setOnNavigationItemSelectedListener(this)
@@ -167,7 +168,6 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
             } else if (item.itemId == com.vptarasov.autosearch.R.id.menu_edit_user) {
                 showUserActivity()
             }
-
             false
         }
 
@@ -176,7 +176,7 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     override fun showUserInfo() {
         loggedInUser = App.instance!!.user
         userNameTV?.text = loggedInUser.name
-        if("" != loggedInUser.photoUrl){
+        if ("" != loggedInUser.photoUrl) {
             Picasso.get().load(loggedInUser.photoUrl).into(userPhotoIV)
         }
     }

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+<LinearLayout
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
@@ -12,14 +16,13 @@
             android:layout_height="wrap_content"
             android:text="@string/edit_user_text"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
+            android:layout_marginTop="20dp"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <androidx.cardview.widget.CardView
             android:layout_width="125dp"
             android:layout_height="125dp"
-            android:id="@+id/cardViewEdit"
-            android:layout_margin="5dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
             app:cardCornerRadius="58dp"
             app:cardElevation="5dp"
@@ -29,42 +32,74 @@
                 android:id="@+id/userPhotoedit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_person"
                 tools:ignore="ContentDescription"/>
     </androidx.cardview.widget.CardView>
 
-    <EditText
-            android:id="@+id/photoUrlInput"
-            android:layout_width="match_parent"
+    <Button
+            android:id="@+id/userPhotoChooseButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="@string/photo_user_edit"
-            android:inputType="textUri"/>
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/choose_photo_from_gallery"/>
 
 
     <EditText
             android:id="@+id/userNameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="@string/user_name_edit"/>
+            android:layout_marginTop="20dp"
+            android:hint="@string/user_name_edit"
+            tools:ignore="Autofill"
+            android:inputType="textPersonName"/>
 
     <EditText
             android:id="@+id/emailInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="10dp"
             android:hint="@string/email_user_edit"
-            android:inputType="textEmailAddress"/>
-
+            android:inputType="textEmailAddress"
+            tools:ignore="Autofill"/>
 
     <Button
+            android:id="@+id/userApplyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/border_button"
+            android:paddingStart="12dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="3dp"
             android:layout_gravity="center_horizontal"
             android:text="@string/save"/>
 
 </LinearLayout>
+
+    <Button
+            android:id="@+id/buttonBackUser"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/arrowleft"
+            android:layout_gravity="top|start"
+            android:clickable="true"
+            android:focusable="true"
+            tools:ignore="ContentDescription,NotSibling"
+            android:layout_marginLeft="15dp" />
+
+    <ProgressBar
+            android:id="@+id/progressBarUser"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</FrameLayout>

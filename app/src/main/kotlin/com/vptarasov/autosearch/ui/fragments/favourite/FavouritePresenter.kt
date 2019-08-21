@@ -1,7 +1,7 @@
 package com.vptarasov.autosearch.ui.fragments.favourite
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.model.Car
 import io.reactivex.disposables.CompositeDisposable
 
@@ -24,10 +24,9 @@ class FavouritePresenter : FavouriteContract.Presenter {
 
     override fun loadFavouriteCars() {
         view.showProgress()
-        val userId = FirebaseAuth.getInstance()
-            .currentUser?.uid
 
-        FirebaseFirestore.getInstance().collection("car").whereEqualTo("user", userId)
+        FirebaseFirestore.getInstance().collection("user")
+            .document(App.instance!!.user.id).collection(("cars"))
             .get()
             .addOnSuccessListener { result ->
                 val cars: ArrayList<Car> = ArrayList()

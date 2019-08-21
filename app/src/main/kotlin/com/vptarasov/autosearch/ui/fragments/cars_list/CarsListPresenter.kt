@@ -1,8 +1,8 @@
 package com.vptarasov.autosearch.ui.fragments.cars_list
 
 import android.annotation.SuppressLint
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.api.Api
 import com.vptarasov.autosearch.api.HTMLParser
@@ -83,10 +83,9 @@ class CarsListPresenter : CarsListContract.Presenter, BaseFragment() {
         subscriptions.add(subscribe)
     }
     override fun loadFavouriteCars() {
-        val userId = FirebaseAuth.getInstance()
-            .currentUser?.uid
 
-        FirebaseFirestore.getInstance().collection("car").whereEqualTo("user", userId)
+        FirebaseFirestore.getInstance().collection("user")
+            .document(App.instance!!.user.id).collection(("cars"))
             .get()
             .addOnSuccessListener { result ->
                 val favouriteCars: ArrayList<Car> = ArrayList()

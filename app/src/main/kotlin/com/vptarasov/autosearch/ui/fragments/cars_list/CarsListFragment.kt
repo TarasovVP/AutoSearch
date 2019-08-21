@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
@@ -16,7 +15,6 @@ import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.model.QueryDetails
-import com.vptarasov.autosearch.model.User
 import com.vptarasov.autosearch.ui.fragments.base.BaseFragment
 import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.util.FragmentUtil
@@ -145,14 +143,12 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
 
     }
 
- /*   override fun onFavoriteClick(car: Car) {
-        val doc = FirebaseFirestore.getInstance().collection("car")
-            .document(car.urlToId() + FirebaseAuth.getInstance().currentUser?.uid)
+    override fun onFavoriteClick(car: Car) {
 
-        doc
-            .get()
+        val doc = FirebaseFirestore.getInstance().collection("user")
+            .document(App.instance!!.user.id).collection(("cars")).document(car.urlToId())
+        doc.get()
             .addOnCompleteListener { task ->
-
                 if (task.isSuccessful) {
                     val document = task.result
                     if (document!!.exists()) {
@@ -163,7 +159,7 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
                         doc.set(car)
                     }
                 } else {
-                    Toast.makeText(App.instance, "Ошибка", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, context?.getText(R.string.process_error), Toast.LENGTH_LONG).show()
                 }
                 Toast.makeText(
                     context, App.instance?.getString(
@@ -175,26 +171,6 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
                 ).show()
                 adapter?.updateFavIcon(car)
 
-            }
-    }*/
-
-    override fun onFavoriteClick(car: Car) {
-        val doc = FirebaseFirestore.getInstance().collection("user")
-            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
-
-        doc
-            .get()
-            .addOnCompleteListener { task ->
-
-                if (task.isSuccessful) {
-                    val document = task.result
-                    if (document!!.exists()) {
-                        doc.collection("cars").document(car.urlToId())
-
-                    }
-                } else {
-                    Toast.makeText(App.instance, "Ошибка", Toast.LENGTH_LONG).show()
-                }
             }
     }
 
@@ -212,30 +188,5 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
             .build()
 
         fragmentComponent.inject(this)
-    }
-
-    private fun setCarToUser(car: Car, user: User) {
-        val doc = FirebaseFirestore.getInstance().collection("user").document(user.id)
-
-
-        doc
-            .get()
-            .addOnCompleteListener { task ->
-
-                if (task.isSuccessful) {
-                    val document = task.result
-                    doc.set(car)
-
-
-                    /*val document = task.result
-                    if (document!!.exists()) {
-                        doc.delete()
-                        car.setBookmarked(false)
-                    } else {
-                        car.setBookmarked(true)
-                        doc.set(car)
-                    }*/
-                }
-            }
     }
 }
