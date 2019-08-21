@@ -23,11 +23,6 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:name=".GalleryActivity"
-                android:label="@string/title_activity_gallery"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
                 android:name=".ui.activity.splash_screen.SplashScreenActivity"
                 android:noHistory="true">
             <intent-filter>

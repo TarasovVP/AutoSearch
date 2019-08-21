@@ -12,7 +12,6 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import com.vptarasov.autosearch.App
@@ -88,7 +87,7 @@ class CarFragment : Fragment(), CarContract.View {
         presenter.unsubscribe()
     }
 
-    override fun initView(view: View){
+    override fun initView(view: View) {
         viewPager = view.pager
         name = view.nameCar
         price = view.priceCar
@@ -129,12 +128,11 @@ class CarFragment : Fragment(), CarContract.View {
         val phoneNumber = car.phone
         val thread = Thread {
             try {
-
-                val bitmap = Picasso.get().load(phoneNumber).get()
-                val ocr = OCR(bitmap)
-                sellerPhone = ocr.recognizedText()
-
-
+                if (phoneNumber != null && "" != car.phone) {
+                    val bitmap = Picasso.get().load(phoneNumber).get()
+                    val ocr = OCR(bitmap)
+                    sellerPhone = ocr.recognizedText()
+                }
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -170,36 +168,7 @@ class CarFragment : Fragment(), CarContract.View {
         }
 
         favouriteCar?.setOnClickListener {
-            val doc = FirebaseFirestore.getInstance().collection("car")
-                .document(car.urlToId() + FirebaseAuth.getInstance().currentUser?.uid)
-
-            doc
-                .get()
-                .addOnCompleteListener { task ->
-
-                    if (task.isSuccessful) {
-                        val document = task.result
-                        if (document!!.exists()) {
-                            doc.delete()
-                            car.setBookmarked(false)
-                        } else {
-                            car.setBookmarked(true)
-                            doc.set(car)
-                        }
-                    } else {
-                        Toast.makeText(App.instance, "Ошибка", Toast.LENGTH_LONG).show()
-                    }
-                    Toast.makeText(
-                        context, App.instance?.getString(
-                            if (car.isBookmarked())
-                                R.string.add_favor
-                            else
-                                R.string.delete_favor
-                        ), Toast.LENGTH_SHORT
-                    ).show()
-                    updateFavIcon(car)
-
-                }
+            onFavoriteClick(car)
         }
 
         photoList = car.photoList
@@ -213,8 +182,39 @@ class CarFragment : Fragment(), CarContract.View {
 
         fragmentComponent.inject(this)
     }
+
     private fun updateFavIcon(car: Car) {
         favouriteCar?.setBackgroundResource(if (car.isBookmarked()) R.drawable.favouritechecked else R.drawable.favourite)
+    }
+
+    override fun onFavoriteClick(car: Car) {
+
+        val doc = FirebaseFirestore.getInstance().collection("user")
+            .document(App.instance!!.user.id).collection(("cars")).document(car.urlToId())
+        doc.get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document!!.exists()) {
+                        doc.delete()
+                        car.setBookmarked(false)
+                    } else {
+                        car.setBookmarked(true)
+                        doc.set(car)
+                    }
+                } else {
+                    Toast.makeText(context, context?.getText(R.string.process_error), Toast.LENGTH_LONG).show()
+                }
+                Toast.makeText(
+                    context, App.instance?.getString(
+                        if (car.isBookmarked())
+                            R.string.add_favor
+                        else
+                            R.string.delete_favor
+                    ), Toast.LENGTH_SHORT
+                ).show()
+                updateFavIcon(car)
+            }
     }
 
 }

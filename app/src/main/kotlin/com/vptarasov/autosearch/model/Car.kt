@@ -5,25 +5,26 @@ import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import java.io.Serializable
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Car : Serializable {
-    var name: String? = null
-    var price: String? = null
-    var year: String? = null
-    var photo: String? = null
-    var engine: String? = null
-    var mileage: String? = null
-    var color: String? = null
-    var gearbox: String? = null
-    var drive: String? = null
-    var body: String? = null
-    var city: String? = null
-    var date: String? = null
-    var url: String? = null
-    var phone: String? = null
-    var photoSeller: String? = null
-    var photoList: ArrayList<String>? = null
-    var webMainText: String? = null
+    var name: String? = ""
+    var price: String? = ""
+    var year: String? = ""
+    var photo: String? = ""
+    var engine: String? = ""
+    var mileage: String? = ""
+    var color: String? = ""
+    var gearbox: String? = ""
+    var drive: String? = ""
+    var body: String? = ""
+    var city: String? = ""
+    var date: String? = ""
+    var url: String? = ""
+    var phone: String? = ""
+    var photoSeller: String? = ""
+    var photoList: ArrayList<String>? = ArrayList()
+    var webMainText: String? = ""
     private var bookmarked: Boolean = false
 
     var user: String? = null

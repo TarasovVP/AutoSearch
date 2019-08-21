@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
@@ -82,8 +81,8 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
     }
 
     override fun onFavoriteClick(car: Car) {
-        val doc = FirebaseFirestore.getInstance().collection("car")
-            .document(car.urlToId() + FirebaseAuth.getInstance().currentUser?.uid)
+        val doc = FirebaseFirestore.getInstance().collection("user")
+            .document(App.instance!!.user.id).collection(("cars")).document(car.urlToId())
 
         doc
         .get()

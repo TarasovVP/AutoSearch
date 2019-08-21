@@ -73,6 +73,8 @@ class HTMLParser {
             val element = Jsoup.parse(html).select("div[id=maincol]")
             val infocol = element.select("div[id=infocol]")
 
+            car.user = FirebaseAuth.getInstance().currentUser?.uid
+
             car.name = infocol.select("h1").first().text()
             car.year = infocol.select("span").first().text()
             car.price = infocol.select("abbr").first().text()
@@ -97,13 +99,13 @@ class HTMLParser {
 
 
             val fotocol = element.select("div[id=fotocol]")
+            car.photo = Constants.IMG_URL + fotocol.select("div#big_foto.spinner2").select("a").attr("href")
+            car.photoList = getPhotoList(element)
+
             val city = fotocol.select("div[id=where]").select("a").first().text()
             car.city = if (city.contains("(")) city.substring(0, city.indexOf('(')) else city
             car.phone = Constants.IMG_URL + fotocol.select("img.phone").attr("src")
             car.photoSeller = Constants.IMG_URL + fotocol.select("img").attr("src")
-            car.photo = Constants.IMG_URL + fotocol.select("div#big_foto.spinner2").select("a").attr("href")
-            car.photoList = getPhotoList(element)
-            car.user = FirebaseAuth.getInstance().currentUser?.uid
 
         } catch (e: Exception) {
             e.printStackTrace()

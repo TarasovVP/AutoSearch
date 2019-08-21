@@ -16,7 +16,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        user = User(id = "", name = "", email = "", phoneNumber = "", photoUrl = "", cars = ArrayList())
+        user = User(id = "", name = "", email = "", photoUrl = "", cars = ArrayList())
         setup()
 
     }

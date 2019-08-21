@@ -8,6 +8,7 @@ class CarContract {
     interface View: AppContract.View{
         fun initView(view: android.view.View)
         fun setDataToViews(car: Car)
+        fun onFavoriteClick(car: Car)
     }
 
     interface Presenter: AppContract.Presenter<View>{
