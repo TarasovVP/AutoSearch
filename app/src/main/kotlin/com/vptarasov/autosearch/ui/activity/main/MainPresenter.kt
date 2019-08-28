@@ -37,7 +37,11 @@ class MainPresenter: MainContract.Presenter {
                         view.showUserInfo()
                         view.showCarsListFragment()
                     } else {
-                        doc.set(firebaseUser)
+                        val newUser = User()
+                        newUser.id = firebaseUser.uid
+                        doc.set(newUser)
+                        App.instance!!.user = newUser
+                        view.showUserInfo()
                         view.showUserActivity()
                     }
 

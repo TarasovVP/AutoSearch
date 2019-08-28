@@ -71,8 +71,8 @@ class CarFragment : Fragment(), CarContract.View {
         super.onActivityCreated(savedInstanceState)
         val args = arguments
         if (args != null) {
-            val url = args.getString("carUrl")
-            presenter.loadCar(url)
+            val urlCar = args.getString("carUrl")
+            presenter.loadCar(urlCar)
         }
     }
 
@@ -151,20 +151,9 @@ class CarFragment : Fragment(), CarContract.View {
         }
 
         buttonBack?.setOnClickListener { Objects.requireNonNull(fragmentManager)?.popBackStack() }
+
         zoomOut?.setOnClickListener {
-            val photoFullSizeFragment = PhotoFullSizeFragment()
-            val bundle = Bundle()
-            bundle.putStringArrayList("photoList", photoList)
-            bundle.putInt("viewPagerPosition", viewPager!!.currentItem)
-            bundle.putString("name", car.name)
-            bundle.putString("price", car.price)
-            bundle.putString("year", car.year)
-            photoFullSizeFragment.arguments = bundle
-            FragmentUtil.replaceFragment(
-                (view?.context as AppCompatActivity).supportFragmentManager,
-                photoFullSizeFragment,
-                true
-            )
+            showphotoFullSizeFragment(car)
         }
 
         favouriteCar?.setOnClickListener {
@@ -215,6 +204,22 @@ class CarFragment : Fragment(), CarContract.View {
                 ).show()
                 updateFavIcon(car)
             }
+    }
+
+    override fun showphotoFullSizeFragment(car: Car){
+        val photoFullSizeFragment = PhotoFullSizeFragment()
+        val bundle = Bundle()
+        bundle.putStringArrayList("photoList", photoList)
+        bundle.putInt("viewPagerPosition", viewPager!!.currentItem)
+        bundle.putString("name", car.name)
+        bundle.putString("price", car.price)
+        bundle.putString("year", car.year)
+        photoFullSizeFragment.arguments = bundle
+        FragmentUtil.replaceFragment(
+            (view?.context as AppCompatActivity).supportFragmentManager,
+            photoFullSizeFragment,
+            true
+        )
     }
 
 }

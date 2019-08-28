@@ -1,14 +1,12 @@
 package com.vptarasov.autosearch.ui.fragments.car
 
-import android.annotation.SuppressLint
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
-import com.vptarasov.autosearch.api.Api
+import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.model.Car
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 
 class CarPresenter : CarContract.Presenter {
 
@@ -28,24 +26,25 @@ class CarPresenter : CarContract.Presenter {
         this.view = view
     }
 
-    @SuppressLint("CheckResult")
-    override fun loadCar(url: String?) {
-        val subscribe = Api
-            .service
-            .loadUrl(url)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ responseBody ->
+    override fun loadCar(urlCar: String?) {
+        val viewModelJob = Job()
+        val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+        val getResponseBody = GetResponseBody()
 
-                val html = responseBody.string()
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = getResponseBody.loadCar(
+                    GetResponseBody.Params(), urlCar.toString()
+                )
+
                 val htmlParser = HTMLParser()
-                val car = htmlParser.getCar(html)
-                car.url = url
+                val car = htmlParser.getCar(result.responseBody.toString())
+                car.url = urlCar
 
                 loadFavouriteCars(car)
 
-            }, { throwable -> throwable.printStackTrace() })
-        subscriptions.add(subscribe)
+            }
+        }
     }
 
     override fun loadFavouriteCars(car: Car) {
