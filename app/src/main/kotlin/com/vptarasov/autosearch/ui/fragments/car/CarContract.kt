@@ -9,10 +9,11 @@ class CarContract {
         fun initView(view: android.view.View)
         fun setDataToViews(car: Car)
         fun onFavoriteClick(car: Car)
+        fun showphotoFullSizeFragment(car: Car)
     }
 
     interface Presenter: AppContract.Presenter<View>{
-        fun loadCar(url: String?)
+        fun loadCar(urlCar: String?)
         fun loadFavouriteCars(car: Car)
     }
 }

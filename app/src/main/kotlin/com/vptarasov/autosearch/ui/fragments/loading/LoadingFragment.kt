@@ -10,16 +10,16 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.vptarasov.autosearch.R
+import com.vptarasov.autosearch.animation.Animated
+import com.vptarasov.autosearch.animation.ScreenAnimation
+import com.vptarasov.autosearch.animation.ScreenAnimations
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
-import com.vptarasov.autosearch.animation.Animated
 import com.vptarasov.autosearch.model.SearchData
 import com.vptarasov.autosearch.ui.activity.main.MainActivity
 import com.vptarasov.autosearch.ui.fragments.base.BaseFragment
 import com.vptarasov.autosearch.util.Constants
 import com.vptarasov.autosearch.util.RxUtil
-import com.vptarasov.autosearch.animation.ScreenAnimation
-import com.vptarasov.autosearch.animation.ScreenAnimations
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_loading.view.*
 import javax.inject.Inject
@@ -30,7 +30,6 @@ class LoadingFragment : BaseFragment(), Animated, LoadingContract.View {
     @Inject
     lateinit var presenter: LoadingContract.Presenter
 
-    private var searchData: SearchData? = null
     private var progressTyre: ImageView? = null
     private var logo: ImageView? = null
 
@@ -52,7 +51,7 @@ class LoadingFragment : BaseFragment(), Animated, LoadingContract.View {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
         presenter.subscribe()
-        presenter.loadSearchData()
+
     }
 
     override fun onDestroyView() {
@@ -60,8 +59,7 @@ class LoadingFragment : BaseFragment(), Animated, LoadingContract.View {
         presenter.unsubscribe()
     }
 
-    override fun showMainActivity() {
-        searchData = presenter.getSearchData()
+    override fun showMainActivity(searchData: SearchData) {
         val intent = Intent(activity, MainActivity::class.java)
         intent.putExtra("searchData", searchData)
         startActivity(intent)
@@ -96,7 +94,7 @@ class LoadingFragment : BaseFragment(), Animated, LoadingContract.View {
     }
 
     private fun proceed() {
-        showMainActivity()
+        presenter.loadSearchData()
     }
 
     private fun injectDependency() {

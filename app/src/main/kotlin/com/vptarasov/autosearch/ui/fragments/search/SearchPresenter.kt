@@ -1,12 +1,10 @@
 package com.vptarasov.autosearch.ui.fragments.search
 
-import android.annotation.SuppressLint
 import android.widget.Spinner
-import com.vptarasov.autosearch.api.Api
+import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 import java.util.*
 
 class SearchPresenter : SearchContract.Presenter {
@@ -27,34 +25,43 @@ class SearchPresenter : SearchContract.Presenter {
         subscriptions.clear()
     }
 
-    @SuppressLint("CheckResult")
     override fun getModel(mark: String?, searchModel: Spinner?) {
-        Api
-            .service
-            .getModel(mark)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ responseBody ->
-                val htmlParser = HTMLParser()
-                val model = htmlParser.getModel(responseBody.string())
-                view.fulfillSpinner(ArrayList(model.model!!.values), searchModel)
+        val viewModelJob = Job()
+        val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+        val getResponseBody = GetResponseBody()
 
-            }, { throwable -> throwable.printStackTrace() })
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = getResponseBody.getModel(
+                    GetResponseBody.Params(), mark.toString())
+
+                val htmlParser = HTMLParser()
+                val model = htmlParser.getModel(result.responseBody.toString())
+                withContext(Dispatchers.Main) {
+                    view.fulfillSpinner(ArrayList(model.model!!.values), searchModel)
+                }
+
+            }
+        }
     }
 
-    @SuppressLint("CheckResult")
     override fun getCity(region: String?, searchCity: Spinner?) {
-        Api
-            .service
-            .getCity(region)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ responseBody ->
-                val htmlParser = HTMLParser()
-                val city = htmlParser.getCity(responseBody.string())
-                view.fulfillSpinner(ArrayList(city.city!!.values), searchCity)
+        val viewModelJob = Job()
+        val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+        val getResponseBody = GetResponseBody()
 
-            }, { throwable -> throwable.printStackTrace() })
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = getResponseBody.getCity(
+                    GetResponseBody.Params(), region.toString())
+                val htmlParser = HTMLParser()
+                val city = htmlParser.getCity(result.responseBody.toString())
+
+                withContext(Dispatchers.Main) {
+                    view.fulfillSpinner(ArrayList(city.city!!.values), searchCity)
+                }
+            }
+        }
     }
 
 

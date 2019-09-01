@@ -6,11 +6,10 @@ import com.vptarasov.autosearch.ui.AppContract
 class LoadingContract {
 
     interface View: AppContract.View{
-        fun showMainActivity()
+        fun showMainActivity(searchData: SearchData)
     }
 
     interface Presenter: AppContract.Presenter<View>{
         fun loadSearchData()
-        fun getSearchData(): SearchData?
     }
 }

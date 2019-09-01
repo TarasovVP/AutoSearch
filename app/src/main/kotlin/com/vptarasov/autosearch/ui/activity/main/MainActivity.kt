@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import com.vptarasov.autosearch.App
+import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.di.component.DaggerActivityComponent
 import com.vptarasov.autosearch.di.module.ActivityModule
 import com.vptarasov.autosearch.model.SearchData
@@ -50,7 +51,7 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.vptarasov.autosearch.R.layout.activity_main)
+        setContentView(R.layout.activity_main)
         injectDependency()
         presenter.attach(this)
 
@@ -63,10 +64,10 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            com.vptarasov.autosearch.R.id.catalogue -> showCarsListFragment()
-            com.vptarasov.autosearch.R.id.search_car -> showSearchFragment()
-            com.vptarasov.autosearch.R.id.favouriteList -> showFavouriteListFragment()
-            com.vptarasov.autosearch.R.id.articles -> showNewsPreviewFragment()
+            R.id.catalogue -> showCarsListFragment()
+            R.id.search_car -> showSearchFragment()
+            R.id.favouriteList -> showFavouriteListFragment()
+            R.id.articles -> showNewsPreviewFragment()
         }
         return true
     }
@@ -100,15 +101,15 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
 
     override fun exitByBackKey() {
         val builder = AlertDialog.Builder(this@MainActivity)
-        builder.setMessage(getString(com.vptarasov.autosearch.R.string.want_to_exit_app))
+        builder.setMessage(getString(R.string.want_to_exit_app))
         builder.setCancelable(true)
 
         builder.setPositiveButton(
-            resources.getString(com.vptarasov.autosearch.R.string.Yes)
+            resources.getString(R.string.Yes)
         ) { _, _ -> finish() }
 
         builder.setNegativeButton(
-            resources.getString(com.vptarasov.autosearch.R.string.No)
+            resources.getString(R.string.No)
         ) { dialog, _ -> dialog.cancel() }
 
         val alert = builder.create()
@@ -158,14 +159,14 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
 
         toolbarMain = toolbar
         toolbar!!.visibility = View.VISIBLE
-        toolbar.inflateMenu(com.vptarasov.autosearch.R.menu.main_menu)
+        toolbar.inflateMenu(R.menu.main_menu)
         toolbar.setOnMenuItemClickListener { item ->
-            if (item.itemId == com.vptarasov.autosearch.R.id.menu_change_user) {
+            if (item.itemId == R.id.menu_change_user) {
                 AuthUI.getInstance().signOut(this)
                     .addOnCompleteListener {
                         initUser()
                     }
-            } else if (item.itemId == com.vptarasov.autosearch.R.id.menu_edit_user) {
+            } else if (item.itemId == R.id.menu_edit_user) {
                 showUserActivity()
             }
             false
@@ -175,9 +176,16 @@ open class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
 
     override fun showUserInfo() {
         loggedInUser = App.instance!!.user
-        userNameTV?.text = loggedInUser.name
+        if ("" != loggedInUser.name) {
+            userNameTV?.text = loggedInUser.name
+        }else{
+            userNameTV?.text = getString(R.string.user)
+        }
+
         if ("" != loggedInUser.photoUrl) {
             Picasso.get().load(loggedInUser.photoUrl).into(userPhotoIV)
+        }else{
+            userPhotoIV?.setImageResource(R.drawable.ic_person)
         }
     }
 

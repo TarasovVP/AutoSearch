@@ -56,10 +56,6 @@ open class BaseFragment : Fragment() {
         return swipeRefreshLayout as SwipeRefreshLayout
     }
 
-    protected fun setLoading(loading: Boolean) {
-        swipeRefreshLayout?.isRefreshing = loading
-    }
-
     private fun showErrorMessage(text: String) {
         if (isAttached) {
             return

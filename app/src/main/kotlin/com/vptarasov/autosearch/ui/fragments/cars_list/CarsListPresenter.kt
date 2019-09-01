@@ -4,14 +4,13 @@ import android.annotation.SuppressLint
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
-import com.vptarasov.autosearch.api.Api
+import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.model.QueryDetails
 import com.vptarasov.autosearch.ui.fragments.base.BaseFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 
 class CarsListPresenter : CarsListContract.Presenter, BaseFragment() {
 
@@ -35,53 +34,49 @@ class CarsListPresenter : CarsListContract.Presenter, BaseFragment() {
     @SuppressLint("CheckResult")
     override fun loadCars(queryDetails: QueryDetails?, page: Int) {
         view.showProgress()
-        val subscribe = Api
-            .service
-            .loadCars(
-                queryDetails?.mark,
-                queryDetails?.model,
-                queryDetails?.region,
-                queryDetails?.city,
-                queryDetails?.body,
-                queryDetails?.color,
-                queryDetails?.engineFrom,
-                queryDetails?.engineUnit,
-                queryDetails?.yearFrom,
-                queryDetails?.engineTo,
-                queryDetails?.yearTo,
-                queryDetails?.priceFrom,
-                queryDetails?.priceTo,
-                queryDetails?.petrolElectro,
-                queryDetails?.diesel,
-                queryDetails?.electro,
-                queryDetails?.gas,
-                queryDetails?.gasPetrol,
-                queryDetails?.petrol,
-                queryDetails?.gearboxAutom,
-                queryDetails?.gearboxMech,
-                page.toString()
-            )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ responseBody ->
+        val viewModelJob = Job()
+        val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+        val getResponseBody = GetResponseBody()
+
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = getResponseBody.loadCars(
+                    GetResponseBody.Params(), queryDetails!!.mark,
+                    queryDetails.model,
+                    queryDetails.region,
+                    queryDetails.city,
+                    queryDetails.body,
+                    queryDetails.color,
+                    queryDetails.engineFrom,
+                    queryDetails.engineUnit,
+                    queryDetails.yearFrom,
+                    queryDetails.engineTo,
+                    queryDetails.yearTo,
+                    queryDetails.priceFrom,
+                    queryDetails.priceTo,
+                    queryDetails.petrolElectro,
+                    queryDetails.diesel,
+                    queryDetails.electro,
+                    queryDetails.gas,
+                    queryDetails.gasPetrol,
+                    queryDetails.petrol,
+                    queryDetails.gearboxAutom,
+                    queryDetails.gearboxMech,
+                    page.toString()
+                )
                 val htmlParser = HTMLParser()
-                val html = responseBody.string()
-                cars = htmlParser.getCarList(html)
-                lastPage = htmlParser.getLastPage(html)
+                cars = htmlParser.getCarList(result.responseBody.toString())
+                lastPage = htmlParser.getLastPage(result.responseBody.toString())
                 view.getLastPage(lastPage)
                 if (cars.size > 0) {
                     loadFavouriteCars()
                 } else {
                     showErrorMessage(R.string.nothing_found)
                 }
-
-
-            }, { throwable ->
-                throwable.printStackTrace()
-
-            })
-        subscriptions.add(subscribe)
+            }
+        }
     }
+
     override fun loadFavouriteCars() {
 
         FirebaseFirestore.getInstance().collection("user")
@@ -92,8 +87,8 @@ class CarsListPresenter : CarsListContract.Presenter, BaseFragment() {
                 for (document in result) {
                     val carFavourite = document.toObject(Car::class.java)
                     favouriteCars.add(carFavourite)
-                    for (car in cars){
-                        if(car.urlToId() == carFavourite.urlToId()){
+                    for (car in cars) {
+                        if (car.urlToId() == carFavourite.urlToId()) {
                             car.setBookmarked(true)
                         }
                     }
