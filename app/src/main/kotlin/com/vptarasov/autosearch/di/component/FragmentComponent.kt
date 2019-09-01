@@ -4,7 +4,6 @@ import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.ui.fragments.cars_list.CarsListFragment
 import com.vptarasov.autosearch.ui.fragments.favourite.FavouriteFragment
-import com.vptarasov.autosearch.ui.fragments.loading.LoadingFragment
 import com.vptarasov.autosearch.ui.fragments.news.NewsFragment
 import com.vptarasov.autosearch.ui.fragments.news_preview.NewsPreviewFragment
 import com.vptarasov.autosearch.ui.fragments.photo_full_size.PhotoFullSizeFragment
@@ -14,7 +13,6 @@ import dagger.Component
 @Component(modules = [FragmentModule::class])
 interface FragmentComponent {
 
-    fun inject(loadingFragment: LoadingFragment)
     fun inject(carsListFragment: CarsListFragment)
     fun inject(carFragment: CarFragment)
     fun inject(photoFullSizeFragment: PhotoFullSizeFragment)

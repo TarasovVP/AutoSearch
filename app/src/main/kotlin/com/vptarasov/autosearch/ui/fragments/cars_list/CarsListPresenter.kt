@@ -1,6 +1,7 @@
 package com.vptarasov.autosearch.ui.fragments.cars_list
 
 import android.annotation.SuppressLint
+import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
@@ -8,11 +9,10 @@ import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.model.QueryDetails
-import com.vptarasov.autosearch.ui.fragments.base.BaseFragment
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 
-class CarsListPresenter : CarsListContract.Presenter, BaseFragment() {
+class CarsListPresenter : CarsListContract.Presenter, Fragment() {
 
     private val subscriptions = CompositeDisposable()
     private lateinit var view: CarsListContract.View
@@ -71,7 +71,7 @@ class CarsListPresenter : CarsListContract.Presenter, BaseFragment() {
                 if (cars.size > 0) {
                     loadFavouriteCars()
                 } else {
-                    showErrorMessage(R.string.nothing_found)
+                    view.showErrorMessage(getString(R.string.nothing_found))
                 }
             }
         }

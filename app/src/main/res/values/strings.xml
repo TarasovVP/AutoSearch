@@ -55,5 +55,4 @@
     <string name="choose_photo_from_gallery">Выберите фото из галлереи</string>
     <string name="process_error">Ошибка изменения профиля</string>
     <string name="process_success">Выполнено успешно</string>
-    <string name="title_activity_coroutines">CoroutinesActivity</string>
 </resources>

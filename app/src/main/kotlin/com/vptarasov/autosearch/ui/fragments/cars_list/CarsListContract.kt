@@ -16,6 +16,7 @@ class CarsListContract {
         fun getLastPage(lastPage: Int)
         fun showProgress()
         fun hideProgress()
+        fun showErrorMessage(error: String)
     }
 
     interface Presenter : AppContract.Presenter<View>{
