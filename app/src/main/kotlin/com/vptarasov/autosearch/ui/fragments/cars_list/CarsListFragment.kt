@@ -39,6 +39,7 @@ class CarsListFragment : Fragment(), CarsListContract.View {
     private lateinit var tvPage: TextView
     private lateinit var searchPaging: RelativeLayout
     private lateinit var progressBar: ProgressBar
+    private lateinit var nothingFoundText: TextView
 
     @Inject
     lateinit var presenter: CarsListContract.Presenter
@@ -49,7 +50,11 @@ class CarsListFragment : Fragment(), CarsListContract.View {
         injectDependency()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_cars_list, container, false)
         initView(view)
         return view
@@ -101,6 +106,7 @@ class CarsListFragment : Fragment(), CarsListContract.View {
         tvPage = view.tvPage
         searchPaging = view.searchPaging as RelativeLayout
         progressBar = view.progressBarCarsList
+        nothingFoundText = view.nothingFoundText
 
         btnRight.setOnClickListener {
             if (page < lastPage) {
@@ -163,7 +169,11 @@ class CarsListFragment : Fragment(), CarsListContract.View {
                         doc.set(car)
                     }
                 } else {
-                    Toast.makeText(context, context?.getText(R.string.process_error), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        context?.getText(R.string.process_error),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 Toast.makeText(
                     context, App.instance?.getString(
@@ -196,6 +206,11 @@ class CarsListFragment : Fragment(), CarsListContract.View {
     override fun hideProgress() {
         progressBar.visibility = View.GONE
     }
+
+    override fun showNothingFoundText() {
+        nothingFoundText.visibility = View.VISIBLE
+    }
+
 
     private fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()

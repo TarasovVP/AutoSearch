@@ -17,6 +17,7 @@ class CarsListContract {
         fun showProgress()
         fun hideProgress()
         fun showErrorMessage(error: String)
+        fun showNothingFoundText()
     }
 
     interface Presenter : AppContract.Presenter<View>{
