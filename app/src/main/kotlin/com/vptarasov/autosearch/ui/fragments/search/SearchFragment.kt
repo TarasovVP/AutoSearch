@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.Fragment
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
@@ -13,14 +14,13 @@ import com.vptarasov.autosearch.model.City
 import com.vptarasov.autosearch.model.Model
 import com.vptarasov.autosearch.model.QueryDetails
 import com.vptarasov.autosearch.model.SearchData
-import com.vptarasov.autosearch.ui.fragments.base.BaseFragment
 import com.vptarasov.autosearch.ui.fragments.cars_list.CarsListFragment
 import com.vptarasov.autosearch.util.FragmentUtil
 import kotlinx.android.synthetic.main.fragment_search_main.view.*
 import java.util.*
 import javax.inject.Inject
 
-class SearchFragment : BaseFragment(), SearchContract.View {
+class SearchFragment : Fragment(), SearchContract.View {
 
     private var searchData: SearchData? = null
     private var queryDetails: QueryDetails? = null
@@ -59,7 +59,7 @@ class SearchFragment : BaseFragment(), SearchContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflateWithLoadingIndicator(R.layout.fragment_search_main, container)
+        val view = inflater.inflate(R.layout.fragment_search_main, container, false)
         initView(view)
         return view
     }

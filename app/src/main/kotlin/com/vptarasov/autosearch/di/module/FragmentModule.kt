@@ -6,8 +6,6 @@ import com.vptarasov.autosearch.ui.fragments.cars_list.CarsListContract
 import com.vptarasov.autosearch.ui.fragments.cars_list.CarsListPresenter
 import com.vptarasov.autosearch.ui.fragments.favourite.FavouriteContract
 import com.vptarasov.autosearch.ui.fragments.favourite.FavouritePresenter
-import com.vptarasov.autosearch.ui.fragments.loading.LoadingContract
-import com.vptarasov.autosearch.ui.fragments.loading.LoadingPresenter
 import com.vptarasov.autosearch.ui.fragments.news.NewsContract
 import com.vptarasov.autosearch.ui.fragments.news.NewsPresenter
 import com.vptarasov.autosearch.ui.fragments.news_preview.NewsPreviewContract
@@ -21,10 +19,6 @@ import dagger.Provides
 
 @Module
 class FragmentModule {
-    @Provides
-    fun provideLoadingPresenter(): LoadingContract.Presenter {
-        return LoadingPresenter()
-    }
     @Provides
     fun provideCarsListPresenter(): CarsListContract.Presenter {
         return CarsListPresenter()

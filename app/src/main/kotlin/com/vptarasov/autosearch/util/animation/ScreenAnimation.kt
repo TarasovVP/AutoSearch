@@ -1,4 +1,4 @@
-package com.vptarasov.autosearch.animation
+package com.vptarasov.autosearch.util.animation
 
 import android.widget.ImageView
 

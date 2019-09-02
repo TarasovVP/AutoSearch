@@ -6,23 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.tapadoo.alerter.Alerter
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.model.QueryDetails
-import com.vptarasov.autosearch.ui.fragments.base.BaseFragment
 import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.util.FragmentUtil
 import kotlinx.android.synthetic.main.fragment_cars_list.view.*
 import kotlinx.android.synthetic.main.list_pages.view.*
+import java.util.*
 import javax.inject.Inject
 
-class CarsListFragment : BaseFragment(), CarsListContract.View {
+class CarsListFragment : Fragment(), CarsListContract.View {
 
     private var adapter: CarsListAdapter? = null
     private var page: Int = 1
@@ -35,6 +39,7 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
     private lateinit var tvPage: TextView
     private lateinit var searchPaging: RelativeLayout
     private lateinit var progressBar: ProgressBar
+    private lateinit var nothingFoundText: TextView
 
     @Inject
     lateinit var presenter: CarsListContract.Presenter
@@ -45,8 +50,12 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
         injectDependency()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflateWithLoadingIndicator(R.layout.fragment_cars_list, container)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_cars_list, container, false)
         initView(view)
         return view
     }
@@ -97,6 +106,7 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
         tvPage = view.tvPage
         searchPaging = view.searchPaging as RelativeLayout
         progressBar = view.progressBarCarsList
+        nothingFoundText = view.nothingFoundText
 
         btnRight.setOnClickListener {
             if (page < lastPage) {
@@ -159,7 +169,11 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
                         doc.set(car)
                     }
                 } else {
-                    Toast.makeText(context, context?.getText(R.string.process_error), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        context?.getText(R.string.process_error),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 Toast.makeText(
                     context, App.instance?.getString(
@@ -174,6 +188,17 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
             }
     }
 
+    override fun showErrorMessage(error: String) {
+        Alerter.create(Objects.requireNonNull<FragmentActivity>(activity))
+            .setIconColorFilter(ContextCompat.getColor(activity!!, android.R.color.white))
+            .setBackgroundColorRes(R.color.colorError)
+            .setIcon(R.drawable.ic_close_circle)
+            .setTitle(R.string.error)
+            .setText(error)
+            .show()
+    }
+
+
     override fun showProgress() {
         progressBar.visibility = View.VISIBLE
     }
@@ -181,6 +206,11 @@ class CarsListFragment : BaseFragment(), CarsListContract.View {
     override fun hideProgress() {
         progressBar.visibility = View.GONE
     }
+
+    override fun showNothingFoundText() {
+        nothingFoundText.visibility = View.VISIBLE
+    }
+
 
     private fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()
