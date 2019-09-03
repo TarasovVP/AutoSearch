@@ -37,7 +37,7 @@ class SplashScreenPresenter : SplashScreenContract.Presenter {
                     result = getResponseBody.loadSearchData(
                         GetResponseBody.Params(), "")
                 } catch (e: Exception) {
-                    Logger.getLogger(SplashScreenActivity::class.java.name).warning("Error..")
+                    Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in SplashScreenFragment")
                     view.showMainActivity(SearchData())
                 }
 

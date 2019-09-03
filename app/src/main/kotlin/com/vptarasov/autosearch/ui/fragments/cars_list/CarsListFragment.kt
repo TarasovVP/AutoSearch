@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tapadoo.alerter.Alerter
 import com.vptarasov.autosearch.App
@@ -40,6 +41,7 @@ class CarsListFragment : Fragment(), CarsListContract.View {
     private lateinit var searchPaging: RelativeLayout
     private lateinit var progressBar: ProgressBar
     private lateinit var nothingFoundText: TextView
+    private lateinit var swiperefresh: SwipeRefreshLayout
 
     @Inject
     lateinit var presenter: CarsListContract.Presenter
@@ -57,6 +59,7 @@ class CarsListFragment : Fragment(), CarsListContract.View {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_cars_list, container, false)
         initView(view)
+        showProgress()
         return view
     }
 
@@ -107,6 +110,12 @@ class CarsListFragment : Fragment(), CarsListContract.View {
         searchPaging = view.searchPaging as RelativeLayout
         progressBar = view.progressBarCarsList
         nothingFoundText = view.nothingFoundText
+        swiperefresh = view.swiperefresh
+
+        swiperefresh.setOnRefreshListener {
+            presenter.loadCars(queryDetails, page)
+            swiperefresh.isRefreshing = false
+        }
 
         btnRight.setOnClickListener {
             if (page < lastPage) {
@@ -130,6 +139,7 @@ class CarsListFragment : Fragment(), CarsListContract.View {
         recyclerViewCar.adapter = adapter
         tvPage.text = App.instance?.getString(R.string.page) + " " + page + " из " + lastPage
         searchPaging.visibility = View.GONE
+        hideProgress()
     }
 
     override fun onLastItemReached() {

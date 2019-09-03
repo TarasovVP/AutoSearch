@@ -5,8 +5,10 @@ import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.model.Car
+import com.vptarasov.autosearch.ui.activity.splash_screen.SplashScreenActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
+import java.util.logging.Logger
 
 class CarPresenter : CarContract.Presenter {
 
@@ -33,6 +35,7 @@ class CarPresenter : CarContract.Presenter {
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+                try {
                 val result = getResponseBody.loadCar(
                     GetResponseBody.Params(), urlCar.toString()
                 )
@@ -42,7 +45,9 @@ class CarPresenter : CarContract.Presenter {
                 car.url = urlCar
 
                 loadFavouriteCars(car)
-
+                } catch (e: Exception) {
+                    Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in CarFragment")
+                }
             }
         }
     }
