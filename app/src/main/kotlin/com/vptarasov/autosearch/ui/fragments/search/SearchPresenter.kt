@@ -3,9 +3,11 @@ package com.vptarasov.autosearch.ui.fragments.search
 import android.widget.Spinner
 import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
+import com.vptarasov.autosearch.ui.activity.splash_screen.SplashScreenActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import java.util.*
+import java.util.logging.Logger
 
 class SearchPresenter : SearchContract.Presenter {
 
@@ -32,6 +34,7 @@ class SearchPresenter : SearchContract.Presenter {
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+                try {
                 val result = getResponseBody.getModel(
                     GetResponseBody.Params(), mark.toString())
 
@@ -39,6 +42,9 @@ class SearchPresenter : SearchContract.Presenter {
                 val model = htmlParser.getModel(result.responseBody.toString())
                 withContext(Dispatchers.Main) {
                     view.fulfillSpinner(ArrayList(model.model!!.values), searchModel)
+                }
+                } catch (e: Exception) {
+                    Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in getModel in SearchFragment")
                 }
 
             }
@@ -52,6 +58,7 @@ class SearchPresenter : SearchContract.Presenter {
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+                try {
                 val result = getResponseBody.getCity(
                     GetResponseBody.Params(), region.toString())
                 val htmlParser = HTMLParser()
@@ -59,6 +66,9 @@ class SearchPresenter : SearchContract.Presenter {
 
                 withContext(Dispatchers.Main) {
                     view.fulfillSpinner(ArrayList(city.city!!.values), searchCity)
+                }
+                } catch (e: Exception) {
+                    Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in getCity in SearchFragment")
                 }
             }
         }

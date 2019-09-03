@@ -52,15 +52,6 @@
                 android:textColor="@color/offLine"
                 android:textSize="24sp"
                 android:visibility="gone"/>
-
-        <ImageView
-                android:id="@+id/offLineImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:src="@drawable/cloud_off"
-                android:visibility="gone"
-                tools:ignore="ContentDescription"/>
     </LinearLayout>
 
 </merge>

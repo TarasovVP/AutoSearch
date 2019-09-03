@@ -34,7 +34,6 @@ class CarsListPresenter : CarsListContract.Presenter, Fragment() {
 
     @SuppressLint("CheckResult")
     override fun loadCars(queryDetails: QueryDetails?, page: Int) {
-        view.showProgress()
         val viewModelJob = Job()
         val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
         val getResponseBody = GetResponseBody()
@@ -74,15 +73,17 @@ class CarsListPresenter : CarsListContract.Presenter, Fragment() {
                         loadFavouriteCars()
                     } else {
                         withContext(Dispatchers.Main) {
-                            view.hideProgress()
-                            view.showNothingFoundText()
+                            if (App.instance?.isNetworkAvailable()!!) {
+                                view.showNothingFoundText()
+                            }
                         }
                     }
                 } catch (e: Exception) {
-                    Logger.getLogger(SplashScreenActivity::class.java.name).warning("Error..")
+                    Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in CarsListFragment")
                     withContext(Dispatchers.Main) {
-                        view.hideProgress()
-                        view.showNothingFoundText()
+                        if (App.instance?.isNetworkAvailable()!!) {
+                            view.showNothingFoundText()
+                        }
                     }
                 }
             }
@@ -106,10 +107,8 @@ class CarsListPresenter : CarsListContract.Presenter, Fragment() {
                     }
                 }
                 view.initAdapter(cars, lastPage)
-                view.hideProgress()
             }
             .addOnFailureListener {
-                view.hideProgress()
             }
     }
 

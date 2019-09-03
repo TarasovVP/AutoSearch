@@ -123,7 +123,7 @@ open class MainActivity : AppCompatActivity(),
         try {
             FragmentUtil.replaceFragment(supportFragmentManager, CarsListFragment(), false)
         } catch (e: Exception) {
-            Logger.getLogger(SplashScreenActivity::class.java.name).warning("Error..")
+            Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in MainActivity")
         }
     }
 
@@ -211,7 +211,6 @@ open class MainActivity : AppCompatActivity(),
             navigation.visibility = View.VISIBLE
         } else {
             offLineText.visibility = View.VISIBLE
-            offLineImage.visibility = View.VISIBLE
         }
     }
 
