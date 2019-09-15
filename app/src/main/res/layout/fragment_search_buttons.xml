@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button
+            android:id="@+id/resetButton"
+            android:layout_width="111dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="start"
+            android:layout_marginStart="60dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/border_button"
+            android:paddingStart="12dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="3dp"
+            android:text="@string/reset"
+            android:textAlignment="center"
+            android:textColor="@color/searchText"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="60dp"/>
+
+    <Button
+            android:id="@+id/applyButton"
+            android:layout_width="111dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/border_button"
+            android:paddingStart="12dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="3dp"
+            android:text="@string/apply"
+            android:textAlignment="center"
+            android:textColor="@color/searchText"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="60dp"/>
+
+</RelativeLayout>

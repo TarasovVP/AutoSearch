@@ -3,6 +3,7 @@ package com.vptarasov.autosearch.ui.fragments.car
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,9 @@ import javax.inject.Inject
 
 
 class CarFragment : Fragment(), CarContract.View {
+    override fun showView() {
+        Log.d("showView", "showView")
+    }
 
     private var photoList: ArrayList<String>? = null
     private var viewPager: ViewPager? = null
@@ -111,7 +115,7 @@ class CarFragment : Fragment(), CarContract.View {
     }
 
     override fun setDataToViews(car: Car) {
-        updateFavIcon(car)
+        //updateFavIcon(car)
         name?.text = car.name
         year?.text = car.year
         price?.text = car.price

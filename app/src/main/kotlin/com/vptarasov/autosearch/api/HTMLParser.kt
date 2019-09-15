@@ -73,7 +73,7 @@ class HTMLParser {
             val element = Jsoup.parse(html).select("div[id=maincol]")
             val infocol = element.select("div[id=infocol]")
 
-            car.user = FirebaseAuth.getInstance().currentUser?.uid
+            car.user = "111"
 
             car.name = infocol.select("h1").first().text()
             car.year = infocol.select("span").first().text()

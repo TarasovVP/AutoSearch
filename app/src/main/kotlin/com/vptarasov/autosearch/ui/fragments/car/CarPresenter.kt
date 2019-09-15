@@ -8,13 +8,18 @@ import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.ui.activity.splash_screen.SplashScreenActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
+import java.util.*
 import java.util.logging.Logger
+import kotlin.coroutines.CoroutineContext
 
-class CarPresenter : CarContract.Presenter {
+class CarPresenter(private val uiContext: CoroutineContext = Dispatchers.Main) : CarContract.Presenter, CoroutineScope {
+    override val coroutineContext: CoroutineContext
+        get() = uiContext + job
 
 
     private val subscriptions = CompositeDisposable()
     private lateinit var view: CarContract.View
+    private var job: Job = Job()
 
     override fun subscribe() {
 
@@ -29,24 +34,27 @@ class CarPresenter : CarContract.Presenter {
     }
 
     override fun loadCar(urlCar: String?) {
-        val viewModelJob = Job()
-        val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
         val getResponseBody = GetResponseBody()
 
-        viewModelScope.launch {
+        launch {
             withContext(Dispatchers.IO) {
+                view.showView()
                 try {
-                val result = getResponseBody.loadCar(
-                    GetResponseBody.Params(), urlCar.toString()
-                )
+                    val result = getResponseBody.loadCar(
+                        GetResponseBody.Params(), urlCar.toString()
+                    )
 
-                val htmlParser = HTMLParser()
-                val car = htmlParser.getCar(result.responseBody.toString())
-                car.url = urlCar
-
-                loadFavouriteCars(car)
+                    val htmlParser = HTMLParser()
+                    val car = htmlParser.getCar(result.responseBody.toString())
+                    car.url = urlCar
+                    withContext(Dispatchers.Main) {
+                        view.setDataToViews(car)
+                    }
+                    //loadFavouriteCars(car)
                 } catch (e: Exception) {
-                    Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in CarFragment")
+                    Logger.getLogger(SplashScreenActivity::class.java.name)
+                        .warning("Exception in CarFragment")
                 }
             }
         }
@@ -77,6 +85,5 @@ class CarPresenter : CarContract.Presenter {
 
             }
     }
-
 
 }

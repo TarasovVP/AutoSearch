@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import com.vptarasov.autosearch.di.component.AppComponent
 import com.vptarasov.autosearch.di.component.DaggerAppComponent
-import com.vptarasov.autosearch.di.module.AppModule
 import com.vptarasov.autosearch.model.User
 
 class App : Application() {
@@ -22,8 +21,7 @@ class App : Application() {
     }
 
     private fun setup() {
-        component = DaggerAppComponent.builder()
-            .appModule(AppModule(this)).build()
+        component = DaggerAppComponent.builder().build()
         component.inject(this)
     }
 

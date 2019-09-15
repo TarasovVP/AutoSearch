@@ -10,6 +10,7 @@ class CarContract {
         fun setDataToViews(car: Car)
         fun onFavoriteClick(car: Car)
         fun showphotoFullSizeFragment(car: Car)
+        fun showView()
     }
 
     interface Presenter: AppContract.Presenter<View>{

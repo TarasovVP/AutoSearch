@@ -16,7 +16,9 @@ import com.vptarasov.autosearch.model.QueryDetails
 import com.vptarasov.autosearch.model.SearchData
 import com.vptarasov.autosearch.ui.fragments.cars_list.CarsListFragment
 import com.vptarasov.autosearch.util.FragmentUtil
-import kotlinx.android.synthetic.main.fragment_search_main.view.*
+import kotlinx.android.synthetic.main.fragment_search.view.*
+import kotlinx.android.synthetic.main.fragment_search_buttons.view.*
+import kotlinx.android.synthetic.main.fragment_search_checkboxes.view.*
 import java.util.*
 import javax.inject.Inject
 
@@ -59,7 +61,7 @@ class SearchFragment : Fragment(), SearchContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_search_main, container, false)
+        val view = inflater.inflate(R.layout.fragment_search, container, false)
         initView(view)
         return view
     }

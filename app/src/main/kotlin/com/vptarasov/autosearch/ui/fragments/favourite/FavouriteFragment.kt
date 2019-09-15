@@ -1,6 +1,7 @@
 package com.vptarasov.autosearch.ui.fragments.favourite
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +30,7 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
     private var adapter: FavouriteAdapter? = null
     private var recyclerView: RecyclerView? = null
     private var noFoundText: TextView? = null
-    private lateinit var progressBar: ProgressBar
+    private var progressBar: ProgressBar? = null
 
     @Inject
     lateinit var presenter: FavouriteContract.Presenter
@@ -127,11 +128,15 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
     }
 
     override fun showProgress() {
-        progressBar.visibility = View.VISIBLE
+        progressBar?.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        progressBar.visibility = View.GONE
+        progressBar?.visibility = View.GONE
+    }
+
+    override fun getContext(): Context? {
+        return super.getContext()
     }
 
     private fun injectDependency() {

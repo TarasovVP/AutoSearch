@@ -42,6 +42,4 @@ class FavouritePresenter : FavouriteContract.Presenter {
                 view.hideProgress()
             }
     }
-
-
 }

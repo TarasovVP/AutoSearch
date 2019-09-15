@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="3dp"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fuel"
+            android:textColor="@color/searchText"
+            android:textStyle="bold" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <CheckBox
+                android:id="@+id/searchPetrol"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/petrol"
+                android:textColor="@color/searchText"
+                android:theme="@style/checkBoxStyle" />
+
+        <CheckBox
+                android:id="@+id/searchDiesel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/diesel"
+                android:textColor="@color/searchText"
+                android:theme="@style/checkBoxStyle" />
+
+        <CheckBox
+                android:id="@+id/searchGasPetrol"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/gas_petrol"
+                android:textColor="@color/searchText"
+                android:theme="@style/checkBoxStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <CheckBox
+                android:id="@+id/searchElectro"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/electro"
+                android:textColor="@color/searchText"
+                android:theme="@style/checkBoxStyle" />
+
+        <CheckBox
+                android:id="@+id/searchGas"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/gas"
+                android:textColor="@color/searchText"
+                android:theme="@style/checkBoxStyle" />
+
+        <CheckBox
+                android:id="@+id/searchPetrolElectro"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/petrol_electro"
+                android:textColor="@color/searchText"
+                android:theme="@style/checkBoxStyle" />
+    </LinearLayout>
+
+</LinearLayout>

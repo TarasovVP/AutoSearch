@@ -1,11 +1,7 @@
 package com.vptarasov.autosearch.model
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import java.io.Serializable
-import java.util.*
-import kotlin.collections.ArrayList
 
 class Car : Serializable {
     var name: String? = ""
@@ -50,9 +46,9 @@ class Car : Serializable {
         return urlToId() + FirebaseAuth.getInstance().currentUser?.uid == car?.urlToId() + FirebaseAuth.getInstance().currentUser?.uid
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+   /* @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     override fun hashCode(): Int {
         return Objects.hash(urlToId() + FirebaseAuth.getInstance().currentUser?.uid)
-    }
+    }*/
 
 }
