@@ -2,7 +2,6 @@ package com.vptarasov.autosearch.ui.fragments.cars_list
 
 import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
-import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
@@ -42,7 +41,7 @@ class CarsListPresenter : CarsListContract.Presenter, Fragment() {
             withContext(Dispatchers.IO) {
                 try {
                     val result = getResponseBody.loadCars(
-                        GetResponseBody.Params(), queryDetails!!.mark,
+                        queryDetails!!.mark,
                         queryDetails.model,
                         queryDetails.region,
                         queryDetails.city,
@@ -92,10 +91,10 @@ class CarsListPresenter : CarsListContract.Presenter, Fragment() {
 
     override fun loadFavouriteCars() {
 
-        FirebaseFirestore.getInstance().collection("user")
-            .document(App.instance!!.user.id).collection(("cars"))
-            .get()
-            .addOnSuccessListener { result ->
+        App.instance?.firebaseFirestore?.collection("user")
+            ?.document(App.instance!!.user.id)?.collection(("cars"))
+            ?.get()
+            ?.addOnSuccessListener { result ->
                 val favouriteCars: ArrayList<Car> = ArrayList()
                 for (document in result) {
                     val carFavourite = document.toObject(Car::class.java)
@@ -108,7 +107,7 @@ class CarsListPresenter : CarsListContract.Presenter, Fragment() {
                 }
                 view.initAdapter(cars, lastPage)
             }
-            .addOnFailureListener {
+            ?.addOnFailureListener {
             }
     }
 

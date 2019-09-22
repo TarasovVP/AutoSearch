@@ -1,6 +1,6 @@
 package com.vptarasov.autosearch.ui.fragments.news_preview
 
-import com.google.firebase.firestore.FirebaseFirestore
+import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.model.News
 import io.reactivex.disposables.CompositeDisposable
 
@@ -22,10 +22,9 @@ class NewsPreviewPresenter : NewsPreviewContract.Presenter {
 
     override fun getNewsFromFirebase(){
         view.showProgress()
-        val firestore = FirebaseFirestore.getInstance()
-        firestore.collection("news")
-            .get()
-            .addOnSuccessListener { result ->
+        App.instance?.firebaseFirestore?.collection("news")
+            ?.get()
+            ?.addOnSuccessListener { result ->
                 val news: ArrayList<News> = ArrayList()
                 for (document in result) {
                     val newsSingle = document.toObject(News::class.java)
@@ -34,7 +33,7 @@ class NewsPreviewPresenter : NewsPreviewContract.Presenter {
                 view.initAdapter(news)
                 view.hideProgress()
             }
-            .addOnFailureListener {
+            ?.addOnFailureListener {
                 view.hideProgress()
             }
     }

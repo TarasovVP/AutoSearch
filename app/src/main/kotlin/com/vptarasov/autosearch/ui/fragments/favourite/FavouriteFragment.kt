@@ -8,23 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
-import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.model.Car
+import com.vptarasov.autosearch.ui.fragments.BaseCarFragment
 import com.vptarasov.autosearch.ui.fragments.car.CarFragment
 import com.vptarasov.autosearch.util.FragmentUtil
 import kotlinx.android.synthetic.main.fragment_favourite_list.view.*
 import javax.inject.Inject
 
 
-class FavouriteFragment : Fragment(), FavouriteContract.View {
+class FavouriteFragment : BaseCarFragment(), FavouriteContract.View {
 
 
     private var adapter: FavouriteAdapter? = null
@@ -82,45 +79,21 @@ class FavouriteFragment : Fragment(), FavouriteContract.View {
     }
 
     override fun onFavoriteClick(car: Car) {
-        val doc = FirebaseFirestore.getInstance().collection("user")
-            .document(App.instance!!.user.id).collection(("cars")).document(car.urlToId())
+        addDeleCarWithFirebase(car)
+        notifyAdapter(car)
 
-        doc
-        .get()
-            .addOnCompleteListener { task ->
+    }
 
-                if (task.isSuccessful) {
-                    val document = task.result
-                    if (document!!.exists()) {
-                        doc.delete()
-                        car.setBookmarked(false)
-                    } else {
-                        car.setBookmarked(true)
-                        doc.set(car)
-                    }
-                } else {
-                    Toast.makeText(App.instance, "Ошибка", Toast.LENGTH_LONG).show()
-                }
-                Toast.makeText(
-                    context, App.instance?.getString(
-                        if (car.isBookmarked())
-                            R.string.add_favor
-                        else
-                            R.string.delete_favor
-                    ), Toast.LENGTH_SHORT
-                ).show()
-
-            val carsFromAdapter = adapter!!.cars
-            for (i in carsFromAdapter.indices) {
-                if (carsFromAdapter[i] == car) {
-                    adapter?.notifyItemRemoved(i)
-                    adapter?.notifyItemRangeChanged(i, adapter!!.itemCount)
-                    adapter?.cars?.removeAt(i)
-                    break
-                }
+    override fun notifyAdapter(car: Car){
+        val carsFromAdapter = adapter!!.cars
+        for (i in carsFromAdapter.indices) {
+            if (carsFromAdapter[i] == car) {
+                adapter?.notifyItemRemoved(i)
+                adapter?.notifyItemRangeChanged(i, adapter!!.itemCount)
+                adapter?.cars?.removeAt(i)
+                break
             }
         }
-
     }
 
     override fun onLastFavoriteRemoved() {

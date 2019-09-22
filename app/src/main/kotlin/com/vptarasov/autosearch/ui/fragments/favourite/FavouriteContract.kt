@@ -8,6 +8,7 @@ class FavouriteContract {
 
     interface View : AppContract.View {
         fun initAdapter(cars: ArrayList<Car>)
+        fun notifyAdapter(car: Car)
         fun onItemClick(car: Car)
         fun onFavoriteClick(car: Car)
         fun onLastFavoriteRemoved()

@@ -2,7 +2,6 @@ package com.vptarasov.autosearch.ui.activity.main
 
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.model.User
 import io.reactivex.disposables.CompositeDisposable
@@ -25,11 +24,11 @@ class MainPresenter: MainContract.Presenter {
     }
 
     override fun checkUserWithFireStore(firebaseUser: FirebaseUser) {
-        val doc = FirebaseFirestore.getInstance().collection("user")
-            .document(firebaseUser.uid)
+        val doc = App.instance?.firebaseFirestore?.collection("user")
+            ?.document(firebaseUser.uid)
         doc
-            .get()
-            .addOnCompleteListener { task ->
+            ?.get()
+            ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val document = task.result
                     if (document!!.exists()) {

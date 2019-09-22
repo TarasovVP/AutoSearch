@@ -1,6 +1,5 @@
 package com.vptarasov.autosearch.api
 
-import com.google.firebase.auth.FirebaseAuth
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.model.Car
@@ -48,7 +47,7 @@ class HTMLParser {
                 carsList.url = line.select("a").attr("href")
                 carsList.date = line.select("span").text()
 
-                carsList.user = FirebaseAuth.getInstance().currentUser?.uid
+                carsList.user = App.instance?.firebaseAuth?.currentUser?.uid
 
                 carsLists.add(carsList)
             }
@@ -73,7 +72,7 @@ class HTMLParser {
             val element = Jsoup.parse(html).select("div[id=maincol]")
             val infocol = element.select("div[id=infocol]")
 
-            car.user = "111"
+            car.user = App.instance?.firebaseAuth?.currentUser?.uid
 
             car.name = infocol.select("h1").first().text()
             car.year = infocol.select("span").first().text()

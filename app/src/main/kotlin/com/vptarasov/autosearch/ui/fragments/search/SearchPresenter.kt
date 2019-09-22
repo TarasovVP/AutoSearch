@@ -35,8 +35,7 @@ class SearchPresenter : SearchContract.Presenter {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                val result = getResponseBody.getModel(
-                    GetResponseBody.Params(), mark.toString())
+                val result = getResponseBody.getModel(mark.toString())
 
                 val htmlParser = HTMLParser()
                 val model = htmlParser.getModel(result.responseBody.toString())
@@ -59,8 +58,7 @@ class SearchPresenter : SearchContract.Presenter {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                val result = getResponseBody.getCity(
-                    GetResponseBody.Params(), region.toString())
+                val result = getResponseBody.getCity(region.toString())
                 val htmlParser = HTMLParser()
                 val city = htmlParser.getCity(result.responseBody.toString())
 

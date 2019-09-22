@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.di.component.DaggerActivityComponent
@@ -194,7 +193,7 @@ open class MainActivity : AppCompatActivity(),
 
 
     override fun initUser() {
-        if (FirebaseAuth.getInstance().currentUser == null) {
+        if (App.instance?.firebaseAuth?.currentUser == null) {
             startActivityForResult(
                 AuthUI.getInstance()
                     .createSignInIntentBuilder()
@@ -202,7 +201,7 @@ open class MainActivity : AppCompatActivity(),
                 code
             )
         } else {
-            presenter.checkUserWithFireStore(FirebaseAuth.getInstance().currentUser!!)
+            presenter.checkUserWithFireStore(App.instance?.firebaseAuth?.currentUser!!)
         }
     }
 
@@ -222,7 +221,7 @@ open class MainActivity : AppCompatActivity(),
 
         if (requestCode == code) {
             if (resultCode == Activity.RESULT_OK) {
-                presenter.checkUserWithFireStore(FirebaseAuth.getInstance().currentUser!!)
+                presenter.checkUserWithFireStore(App.instance?.firebaseAuth?.currentUser!!)
             } else {
                 Toast.makeText(
                     this,

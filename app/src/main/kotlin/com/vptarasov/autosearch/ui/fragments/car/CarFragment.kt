@@ -3,23 +3,23 @@ package com.vptarasov.autosearch.ui.fragments.car
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
-import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
 import com.vptarasov.autosearch.di.module.FragmentModule
 import com.vptarasov.autosearch.model.Car
+import com.vptarasov.autosearch.ui.fragments.BaseCarFragment
 import com.vptarasov.autosearch.ui.fragments.photo_full_size.PhotoFullSizeFragment
 import com.vptarasov.autosearch.util.FragmentUtil
 import com.vptarasov.autosearch.util.OCR
@@ -29,10 +29,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class CarFragment : Fragment(), CarContract.View {
-    override fun showView() {
-        Log.d("showView", "showView")
-    }
+class CarFragment : BaseCarFragment(), CarContract.View {
 
     private var photoList: ArrayList<String>? = null
     private var viewPager: ViewPager? = null
@@ -115,7 +112,7 @@ class CarFragment : Fragment(), CarContract.View {
     }
 
     override fun setDataToViews(car: Car) {
-        //updateFavIcon(car)
+        updateFavIcon(car)
         name?.text = car.name
         year?.text = car.year
         price?.text = car.price
@@ -182,32 +179,15 @@ class CarFragment : Fragment(), CarContract.View {
 
     override fun onFavoriteClick(car: Car) {
 
-        val doc = FirebaseFirestore.getInstance().collection("user")
-            .document(App.instance!!.user.id).collection(("cars")).document(car.urlToId())
-        doc.get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val document = task.result
-                    if (document!!.exists()) {
-                        doc.delete()
-                        car.setBookmarked(false)
-                    } else {
-                        car.setBookmarked(true)
-                        doc.set(car)
-                    }
-                } else {
-                    Toast.makeText(context, context?.getText(R.string.process_error), Toast.LENGTH_LONG).show()
-                }
-                Toast.makeText(
-                    context, App.instance?.getString(
-                        if (car.isBookmarked())
-                            R.string.add_favor
-                        else
-                            R.string.delete_favor
-                    ), Toast.LENGTH_SHORT
-                ).show()
-                updateFavIcon(car)
-            }
+        if (car.isBookmarked()){
+            car.setBookmarked(false)
+        }else{
+            car.setBookmarked(true)
+        }
+        updateFavIcon(car)
+        addDeleCarWithFirebase(car)
+
+
     }
 
     override fun showphotoFullSizeFragment(car: Car){

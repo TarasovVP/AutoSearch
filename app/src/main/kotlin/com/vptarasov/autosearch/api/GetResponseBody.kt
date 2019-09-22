@@ -3,28 +3,28 @@ package com.vptarasov.autosearch.api
 class GetResponseBody
     : BaseUseCase<GetResponseBody.Params, GetResponseBody.Result>() {
 
-    override suspend fun loadCar(params: Params, urlCar: String): Result {
+    override suspend fun loadCar(urlCar: String): Result {
         return Result(
             ApiService()
                 .doWork(ApiService.Params()).loadCarAsync(urlCar).await().string()
         )
     }
 
-    override suspend fun loadSearchData(params: Params, url: String): Result {
+    override suspend fun loadSearchData(url: String): Result {
         return Result(
             ApiService()
                 .doWork(ApiService.Params()).loadSearchDataAsync(url).await().string()
         )
     }
 
-    override suspend fun getModel(params: Params, url: String): Result {
+    override suspend fun getModel(url: String): Result {
         return Result(
             ApiService()
                 .doWork(ApiService.Params()).getModelAsync(url).await().string()
         )
     }
 
-    override suspend fun getCity(params: Params, url: String): Result {
+    override suspend fun getCity(url: String): Result {
         return Result(
             ApiService()
                 .doWork(ApiService.Params()).getCityAsync(url).await().string()
@@ -33,7 +33,7 @@ class GetResponseBody
 
 
 
-    override suspend fun loadCars(params: Params, mark: String?, model: String?, region: String?, city: String?, body: String?, color: String?, engineFrom: String?, engineUnit: String?, yearFrom: String?, engineTo: String?, yearTo: String?, priceFrom: String?,
+    override suspend fun loadCars(mark: String?, model: String?, region: String?, city: String?, body: String?, color: String?, engineFrom: String?, engineUnit: String?, yearFrom: String?, engineTo: String?, yearTo: String?, priceFrom: String?,
                                   priceTo: String?, petrolElectro: String?, diesel: String?, electro: String?, gas: String?, gasPetrol: String?, petrol: String?, gearboxAutom: String?, gearboxMech: String?, page: String?): Result {
 
         return Result(

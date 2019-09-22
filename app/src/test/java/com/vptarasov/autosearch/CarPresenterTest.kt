@@ -1,7 +1,9 @@
 package com.vptarasov.autosearch
 
-import android.util.Log
-import android.view.View
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.times
+import com.vptarasov.autosearch.api.GetResponseBody
+import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.ui.fragments.car.CarContract
 import com.vptarasov.autosearch.ui.fragments.car.CarPresenter
@@ -12,65 +14,56 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
 
 @ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi
 class CarPresenterTest {
 
-    private val view = TestCarPresenter()
-    private var carPresenter = CarPresenter(Dispatchers.Unconfined)
+    private val CAR_URL = "/car/odesskaya-oblast/odessa/nissan/micra/cabriolet-2006-785646.html"
+
+    private lateinit var view: CarContract.View
+    private var carPresenter = CarPresenter()
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+    private var getResponseBody = GetResponseBody()
+    private var carName: String = ""
+
 
     @Before
     fun setUp() {
-        Log.d("Test", "TestSetUp")
-        view.reset()
         Dispatchers.setMain(mainThreadSurrogate)
+        view = mock()
+        carPresenter.attach(view)
     }
 
     @Test
-    fun loadCar() = runBlocking {
+    fun loadCar() = runBlocking<Unit> {
 
-        launch(Dispatchers.IO) {
-            Assert.assertEquals("Checking initViewCounter", 0, view.initViewCounter)
-            Assert.assertEquals("Checking setDataToViewsCounter", 0, view.setDataToViewsCounter)
-            Assert.assertEquals("Checking showViewsCounter", 1, view.showViewsCounter)
+        launch{
 
+            carPresenter.loadCar(CAR_URL)
+
+            Mockito.verify(view, times(0)).onFavoriteClick(car = Car())
+
+            delay(10000)
+            //Mockito.verify(view, times(1)).setDataToViews(car= Car())
+
+            Assert.assertEquals("AssertCarName", "Nissan Micra Cabrio", carPresenter.name)
         }
-        carPresenter.attach(view)
-        carPresenter.loadCar("/car/odesskaya-oblast/odessa/nissan/micra/cabriolet-2006-785646.html")
+
 
     }
 
-    class TestCarPresenter : CarContract.View {
+    @Test
+    fun getCarfromApi() = runBlocking {
 
-        var initViewCounter = 0
-        var setDataToViewsCounter = 0
-        var showViewsCounter = 0
+        val htmlParser = HTMLParser()
+        val response = getResponseBody.loadCar(CAR_URL).responseBody.toString()
 
-        fun reset() {
-            initViewCounter = 0
-            setDataToViewsCounter = 0
-        }
+        val car = htmlParser.getCar(response)
+        carName = car.name.toString()
 
-        override fun initView(view: View) {
-            initViewCounter++
-        }
-
-        override fun setDataToViews(car: Car) {
-            setDataToViewsCounter++
-        }
-
-        override fun onFavoriteClick(car: Car) {
-
-        }
-
-        override fun showphotoFullSizeFragment(car: Car) {
-
-        }
-        override fun showView() {
-            showViewsCounter++
-        }
+        Assert.assertEquals("Assert carName", "Nissan Micra Cabrio", carName)
     }
 
     @After

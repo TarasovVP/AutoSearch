@@ -1,6 +1,5 @@
 package com.vptarasov.autosearch.ui.fragments.favourite
 
-import com.google.firebase.firestore.FirebaseFirestore
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.model.Car
 import io.reactivex.disposables.CompositeDisposable
@@ -25,10 +24,10 @@ class FavouritePresenter : FavouriteContract.Presenter {
     override fun loadFavouriteCars() {
         view.showProgress()
 
-        FirebaseFirestore.getInstance().collection("user")
-            .document(App.instance!!.user.id).collection(("cars"))
-            .get()
-            .addOnSuccessListener { result ->
+        App.instance?.firebaseFirestore?.collection("user")
+            ?.document(App.instance!!.user.id)?.collection(("cars"))
+            ?.get()
+            ?.addOnSuccessListener { result ->
                 val cars: ArrayList<Car> = ArrayList()
                 for (document in result) {
                     val car = document.toObject(Car::class.java)
@@ -38,7 +37,7 @@ class FavouritePresenter : FavouriteContract.Presenter {
                 view.initAdapter(cars)
                 view.hideProgress()
             }
-            .addOnFailureListener {
+            ?.addOnFailureListener {
                 view.hideProgress()
             }
     }

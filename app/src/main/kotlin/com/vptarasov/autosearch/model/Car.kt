@@ -1,7 +1,10 @@
 package com.vptarasov.autosearch.model
 
-import com.google.firebase.auth.FirebaseAuth
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.vptarasov.autosearch.App
 import java.io.Serializable
+import java.util.*
 
 class Car : Serializable {
     var name: String? = ""
@@ -43,12 +46,12 @@ class Car : Serializable {
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false
         val car = other as Car?
-        return urlToId() + FirebaseAuth.getInstance().currentUser?.uid == car?.urlToId() + FirebaseAuth.getInstance().currentUser?.uid
+        return urlToId() + App.instance?.firebaseAuth?.currentUser?.uid == car?.urlToId() + App.instance?.firebaseAuth?.currentUser?.uid
     }
 
-   /* @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     override fun hashCode(): Int {
-        return Objects.hash(urlToId() + FirebaseAuth.getInstance().currentUser?.uid)
-    }*/
+        return Objects.hash(urlToId() + App.instance?.firebaseAuth?.currentUser?.uid)
+    }
 
 }
