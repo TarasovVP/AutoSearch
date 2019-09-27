@@ -29,7 +29,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class CarFragment : BaseCarFragment(), CarContract.View {
+class CarFragment : BaseCarFragment<CarFragment, CarFragment>(), CarContract.View {
 
     private var photoList: ArrayList<String>? = null
     private var viewPager: ViewPager? = null
@@ -57,11 +57,6 @@ class CarFragment : BaseCarFragment(), CarContract.View {
     @Inject
     lateinit var presenter: CarContract.Presenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        injectDependency()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_car, container, false)
         initView(view)
@@ -80,12 +75,6 @@ class CarFragment : BaseCarFragment(), CarContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
-        presenter.subscribe()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        presenter.unsubscribe()
     }
 
     override fun initView(view: View) {
@@ -165,7 +154,7 @@ class CarFragment : BaseCarFragment(), CarContract.View {
         viewPager?.adapter = PhotoAdapter(childFragmentManager, photoList)
     }
 
-    private fun injectDependency() {
+    override fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()
             .fragmentModule(FragmentModule())
             .build()

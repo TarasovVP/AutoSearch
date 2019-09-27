@@ -46,12 +46,6 @@ class NewsPreviewFragment : Fragment(), NewsPreviewContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
-        presenter.subscribe()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        presenter.unsubscribe()
     }
 
     override fun initAdapter(news: ArrayList<News>) {

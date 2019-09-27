@@ -2,27 +2,12 @@ package com.vptarasov.autosearch.ui.fragments.favourite
 
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.model.Car
-import io.reactivex.disposables.CompositeDisposable
+import com.vptarasov.autosearch.ui.fragments.BaseCarPresenter
 
-class FavouritePresenter : FavouriteContract.Presenter {
+class FavouritePresenter : BaseCarPresenter<FavouriteContract.View>(), FavouriteContract.Presenter {
 
-    private val subscriptions = CompositeDisposable()
-    private lateinit var view: FavouriteContract.View
-
-    override fun attach(view: FavouriteContract.View) {
-        this.view = view
-    }
-
-    override fun subscribe() {
-
-    }
-
-    override fun unsubscribe() {
-        subscriptions.clear()
-    }
-
-    override fun loadFavouriteCars() {
-        view.showProgress()
+     override fun loadFavouriteCars() {
+        getView()?.showProgress()
 
         App.instance?.firebaseFirestore?.collection("user")
             ?.document(App.instance!!.user.id)?.collection(("cars"))
@@ -34,11 +19,11 @@ class FavouritePresenter : FavouriteContract.Presenter {
                     cars.add(car)
 
                 }
-                view.initAdapter(cars)
-                view.hideProgress()
+                getView()?.initAdapter(cars)
+                getView()?.hideProgress()
             }
             ?.addOnFailureListener {
-                view.hideProgress()
+                getView()?.hideProgress()
             }
     }
 }

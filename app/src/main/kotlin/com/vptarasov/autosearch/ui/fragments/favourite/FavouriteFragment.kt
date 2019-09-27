@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_favourite_list.view.*
 import javax.inject.Inject
 
 
-class FavouriteFragment : BaseCarFragment(), FavouriteContract.View {
+class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(), FavouriteContract.View {
 
 
     private var adapter: FavouriteAdapter? = null
@@ -48,13 +48,7 @@ class FavouriteFragment : BaseCarFragment(), FavouriteContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
-        presenter.subscribe()
         presenter.loadFavouriteCars()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        presenter.unsubscribe()
     }
 
     @SuppressLint("SetTextI18n")
@@ -112,7 +106,7 @@ class FavouriteFragment : BaseCarFragment(), FavouriteContract.View {
         return super.getContext()
     }
 
-    private fun injectDependency() {
+    override fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()
             .fragmentModule(FragmentModule())
             .build()

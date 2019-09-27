@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.list_pages.view.*
 import java.util.*
 import javax.inject.Inject
 
-class CarsListFragment : BaseCarFragment(), CarsListContract.View {
+class CarsListFragment : BaseCarFragment<CarsListFragment, CarsListFragment>(), CarsListContract.View {
 
     private var adapter: CarsListAdapter? = null
     private var page: Int = 1
@@ -85,12 +85,6 @@ class CarsListFragment : BaseCarFragment(), CarsListContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
-        presenter.subscribe()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        presenter.unsubscribe()
     }
 
     override fun getLastPage(lastPage: Int) {
@@ -201,7 +195,7 @@ class CarsListFragment : BaseCarFragment(), CarsListContract.View {
     }
 
 
-    private fun injectDependency() {
+    override fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()
             .fragmentModule(FragmentModule())
             .build()

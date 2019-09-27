@@ -10,24 +10,13 @@ import com.google.firebase.storage.UploadTask
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.model.User
-import io.reactivex.disposables.CompositeDisposable
 
 class UserPresenter : UserContract.Presenter {
 
-    private val subscriptions = CompositeDisposable()
     private lateinit var view: UserContract.View
 
     override fun attach(view: UserContract.View) {
         this.view = view
-    }
-
-
-    override fun subscribe() {
-
-    }
-
-    override fun unsubscribe() {
-        subscriptions.clear()
     }
 
     override fun launchGallery() {

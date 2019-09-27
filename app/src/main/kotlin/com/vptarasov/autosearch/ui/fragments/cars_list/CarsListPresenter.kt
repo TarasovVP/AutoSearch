@@ -1,34 +1,23 @@
 package com.vptarasov.autosearch.ui.fragments.cars_list
 
 import android.annotation.SuppressLint
-import androidx.fragment.app.Fragment
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.model.QueryDetails
 import com.vptarasov.autosearch.ui.activity.splash_screen.SplashScreenActivity
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import java.util.logging.Logger
 
-class CarsListPresenter : CarsListContract.Presenter, Fragment() {
+class CarsListPresenter : CarsListContract.Presenter{
 
-    private val subscriptions = CompositeDisposable()
     private lateinit var view: CarsListContract.View
     private lateinit var cars: ArrayList<Car>
     private var lastPage: Int = 1
 
     override fun attach(view: CarsListContract.View) {
         this.view = view
-    }
-
-    override fun subscribe() {
-
-    }
-
-    override fun unsubscribe() {
-        subscriptions.clear()
     }
 
     @SuppressLint("CheckResult")

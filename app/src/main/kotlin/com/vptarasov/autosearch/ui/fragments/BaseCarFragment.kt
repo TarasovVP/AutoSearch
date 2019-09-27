@@ -1,12 +1,19 @@
 package com.vptarasov.autosearch.ui.fragments
 
+import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.model.Car
 
-abstract class BaseCarFragment: Fragment() {
+abstract class BaseCarFragment<Self: BaseCarFragment<Self, T>, T: BaseCarFragment<T, Self>>: Fragment(){
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injectDependency()
+    }
+
 
     fun addDeleCarWithFirebase(car: Car) {
         val doc = App.instance?.firebaseFirestore?.collection("user")
@@ -36,4 +43,7 @@ abstract class BaseCarFragment: Fragment() {
                 ).show()
             }
     }
+
+    abstract fun injectDependency()
+
 }
