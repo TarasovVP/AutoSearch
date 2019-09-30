@@ -2,9 +2,9 @@ package com.vptarasov.autosearch.ui.fragments.favourite
 
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.model.Car
-import com.vptarasov.autosearch.ui.fragments.BaseCarPresenter
+import com.vptarasov.autosearch.ui.fragments.BasePresenter
 
-class FavouritePresenter : BaseCarPresenter<FavouriteContract.View>(), FavouriteContract.Presenter {
+class FavouritePresenter : BasePresenter<FavouriteContract.View>(), FavouriteContract.Presenter {
 
      override fun loadFavouriteCars() {
         getView()?.showProgress()

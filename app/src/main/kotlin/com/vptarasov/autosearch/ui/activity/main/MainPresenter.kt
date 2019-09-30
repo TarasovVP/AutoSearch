@@ -4,14 +4,9 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseUser
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.model.User
+import com.vptarasov.autosearch.ui.fragments.BasePresenter
 
-class MainPresenter: MainContract.Presenter {
-
-    private lateinit var view: MainContract.View
-
-    override fun attach(view: MainContract.View) {
-        this.view = view
-    }
+class MainPresenter: BasePresenter<MainContract.View>(), MainContract.Presenter {
 
     override fun checkUserWithFireStore(firebaseUser: FirebaseUser) {
         val doc = App.instance?.firebaseFirestore?.collection("user")
@@ -23,15 +18,15 @@ class MainPresenter: MainContract.Presenter {
                     val document = task.result
                     if (document!!.exists()) {
                         App.instance!!.user = document.toObject(User::class.java)!!
-                        view.showUserInfo()
-                        view.showCarsListFragment()
+                        getView()?.showUserInfo()
+                        getView()?.showCarsListFragment()
                     } else {
                         val newUser = User()
                         newUser.id = firebaseUser.uid
                         doc.set(newUser)
                         App.instance!!.user = newUser
-                        view.showUserInfo()
-                        view.showUserActivity()
+                        getView()?.showUserInfo()
+                        getView()?.showUserActivity()
                     }
 
                 } else {

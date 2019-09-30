@@ -1,11 +1,5 @@
 package com.vptarasov.autosearch.ui.fragments.photo_full_size
 
-class PhotoFullSizePresenter : PhotoFullSizeContract.Presenter {
+import com.vptarasov.autosearch.ui.fragments.BasePresenter
 
-    private lateinit var view: PhotoFullSizeContract.View
-
-    override fun attach(view: PhotoFullSizeContract.View) {
-        this.view = view
-    }
-
-}
+class PhotoFullSizePresenter : BasePresenter<PhotoFullSizeContract.View>(), PhotoFullSizeContract.Presenter

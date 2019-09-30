@@ -4,7 +4,7 @@ import com.vptarasov.autosearch.ui.AppContract
 
 
 
-abstract class BaseCarPresenter<T>: AppContract.Presenter<T> {
+abstract class BasePresenter<T>: AppContract.Presenter<T> {
 
     private var view: T? = null
 

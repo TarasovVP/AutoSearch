@@ -7,18 +7,14 @@ import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.model.QueryDetails
 import com.vptarasov.autosearch.ui.activity.splash_screen.SplashScreenActivity
+import com.vptarasov.autosearch.ui.fragments.BasePresenter
 import kotlinx.coroutines.*
 import java.util.logging.Logger
 
-class CarsListPresenter : CarsListContract.Presenter{
+class CarsListPresenter : BasePresenter<CarsListContract.View>(), CarsListContract.Presenter{
 
-    private lateinit var view: CarsListContract.View
     private lateinit var cars: ArrayList<Car>
     private var lastPage: Int = 1
-
-    override fun attach(view: CarsListContract.View) {
-        this.view = view
-    }
 
     @SuppressLint("CheckResult")
     override fun loadCars(queryDetails: QueryDetails?, page: Int) {
@@ -56,13 +52,13 @@ class CarsListPresenter : CarsListContract.Presenter{
                     val htmlParser = HTMLParser()
                     cars = htmlParser.getCarList(result.responseBody.toString())
                     lastPage = htmlParser.getLastPage(result.responseBody.toString())
-                    view.getLastPage(lastPage)
+                    getView()?.getLastPage(lastPage)
                     if (cars.size > 0) {
                         loadFavouriteCars()
                     } else {
                         withContext(Dispatchers.Main) {
                             if (App.instance?.isNetworkAvailable()!!) {
-                                view.showNothingFoundText()
+                                getView()?.showNothingFoundText()
                             }
                         }
                     }
@@ -70,7 +66,7 @@ class CarsListPresenter : CarsListContract.Presenter{
                     Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in CarsListFragment")
                     withContext(Dispatchers.Main) {
                         if (App.instance?.isNetworkAvailable()!!) {
-                            view.showNothingFoundText()
+                            getView()?.showNothingFoundText()
                         }
                     }
                 }
@@ -94,7 +90,7 @@ class CarsListPresenter : CarsListContract.Presenter{
                         }
                     }
                 }
-                view.initAdapter(cars, lastPage)
+                getView()?.initAdapter(cars, lastPage)
             }
             ?.addOnFailureListener {
             }

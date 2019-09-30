@@ -5,17 +5,19 @@ import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.model.Car
 import com.vptarasov.autosearch.ui.activity.splash_screen.SplashScreenActivity
-import com.vptarasov.autosearch.ui.fragments.BaseCarPresenter
+import com.vptarasov.autosearch.ui.fragments.BasePresenter
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.logging.Logger
 import kotlin.coroutines.CoroutineContext
 
-class CarPresenter(private val uiContext: CoroutineContext = Dispatchers.Main) : BaseCarPresenter<CarContract.View>(),
+class CarPresenter(private val uiContext: CoroutineContext = Dispatchers.Main) : BasePresenter<CarContract.View>(),
     CarContract.Presenter, CoroutineScope {
 
     override val coroutineContext: CoroutineContext
         get() = uiContext +  Job()
+
+    lateinit var name: String
 
     override fun loadCar(urlCar: String?) {
 
@@ -29,6 +31,7 @@ class CarPresenter(private val uiContext: CoroutineContext = Dispatchers.Main) :
                     val htmlParser = HTMLParser()
                     val car = htmlParser.getCar(result.responseBody.toString())
                     car.url = urlCar
+                    name = car.name.toString()
                     loadFavouriteCars(car)
                 } catch (e: Exception) {
 

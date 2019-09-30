@@ -10,14 +10,9 @@ import com.google.firebase.storage.UploadTask
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.model.User
+import com.vptarasov.autosearch.ui.fragments.BasePresenter
 
-class UserPresenter : UserContract.Presenter {
-
-    private lateinit var view: UserContract.View
-
-    override fun attach(view: UserContract.View) {
-        this.view = view
-    }
+class UserPresenter : BasePresenter<UserContract.View>(), UserContract.Presenter {
 
     override fun launchGallery() {
 
@@ -25,27 +20,27 @@ class UserPresenter : UserContract.Presenter {
 
     override fun upDateUser(loggedInUser: User, context: Context) {
         val db = App.instance?.firebaseFirestore
-        if ("" != view.getNameFromEditText()) {
-            loggedInUser.name = view.getNameFromEditText()
+        if ("" != getView()?.getNameFromEditText()) {
+            loggedInUser.name = getView()!!.getNameFromEditText()
         }
-        if ("" != view.getEmailFromEditText()) {
-            loggedInUser.email = view.getEmailFromEditText()
+        if ("" != getView()?.getEmailFromEditText()) {
+            loggedInUser.email = getView()!!.getEmailFromEditText()
         }
         db?.collection("user")?.document(loggedInUser.id)
             ?.set(loggedInUser)
             ?.addOnSuccessListener {
-                view.hideProgress()
+                getView()?.hideProgress()
                 Toast.makeText(context, context.getText(R.string.process_success), Toast.LENGTH_LONG).show()
-                view.showMainActivity()
+                getView()?.showMainActivity()
             }
             ?.addOnFailureListener {
-                view.hideProgress()
+                getView()?.hideProgress()
                 Toast.makeText(context, context.getText(R.string.process_error), Toast.LENGTH_LONG).show()
             }
     }
 
     override fun uploadImage(filePath: Uri?, context: Context) {
-        view.showProgress()
+        getView()?.showProgress()
 
         val loggedInUser = App.instance?.user
         if (filePath == null) {
@@ -69,7 +64,7 @@ class UserPresenter : UserContract.Presenter {
                     loggedInUser?.photoUrl = downloadUri.toString()
                     loggedInUser?.let { upDateUser(it, context) }
                 } else {
-                    view.hideProgress()
+                    getView()?.hideProgress()
                     Toast.makeText(context, context.getText(R.string.process_error), Toast.LENGTH_LONG).show()
                 }
             }.addOnFailureListener {

@@ -20,7 +20,7 @@ import org.mockito.Mockito
 @ExperimentalCoroutinesApi
 class CarPresenterTest {
 
-    private val CAR_URL = "/car/odesskaya-oblast/odessa/nissan/micra/cabriolet-2006-785646.html"
+    private val CAR_URL = "/car/kievskaya-oblast/kiev/gaz/21-volga/sedan-1960-725945.html"
 
     private lateinit var view: CarContract.View
     private var carPresenter = CarPresenter()
@@ -48,7 +48,7 @@ class CarPresenterTest {
             delay(10000)
             //Mockito.verify(view, times(1)).setDataToViews(car= Car())
 
-            Assert.assertEquals("AssertCarName", "Nissan Micra Cabrio", carPresenter.name)
+            Assert.assertEquals("AssertCarName", "ГАЗ 21 Волга Люкс", carPresenter.name)
         }
 
 
@@ -63,7 +63,7 @@ class CarPresenterTest {
         val car = htmlParser.getCar(response)
         carName = car.name.toString()
 
-        Assert.assertEquals("Assert carName", "Nissan Micra Cabrio", carName)
+        Assert.assertEquals("Assert carName", "ГАЗ 21 Волга Люкс", carName)
     }
 
     @After

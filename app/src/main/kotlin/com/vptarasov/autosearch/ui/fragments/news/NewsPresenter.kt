@@ -1,12 +1,5 @@
 package com.vptarasov.autosearch.ui.fragments.news
 
-class NewsPresenter : NewsContract.Presenter {
+import com.vptarasov.autosearch.ui.fragments.BasePresenter
 
-    private lateinit var view: NewsContract.View
-
-    override fun attach(view: NewsContract.View) {
-        this.view = view
-    }
-
-
-}
+class NewsPresenter : BasePresenter<NewsContract.View>(), NewsContract.Presenter

@@ -4,17 +4,12 @@ import android.widget.Spinner
 import com.vptarasov.autosearch.api.GetResponseBody
 import com.vptarasov.autosearch.api.HTMLParser
 import com.vptarasov.autosearch.ui.activity.splash_screen.SplashScreenActivity
+import com.vptarasov.autosearch.ui.fragments.BasePresenter
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.logging.Logger
 
-class SearchPresenter : SearchContract.Presenter {
-
-    private lateinit var view: SearchContract.View
-
-    override fun attach(view: SearchContract.View) {
-        this.view = view
-    }
+class SearchPresenter : BasePresenter<SearchContract.View>(), SearchContract.Presenter {
 
     override fun getModel(mark: String?, searchModel: Spinner?) {
         val viewModelJob = Job()
@@ -29,7 +24,7 @@ class SearchPresenter : SearchContract.Presenter {
                 val htmlParser = HTMLParser()
                 val model = htmlParser.getModel(result.responseBody.toString())
                 withContext(Dispatchers.Main) {
-                    view.fulfillSpinner(ArrayList(model.model!!.values), searchModel)
+                    getView()?.fulfillSpinner(ArrayList(model.model!!.values), searchModel)
                 }
                 } catch (e: Exception) {
                     Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in getModel in SearchFragment")
@@ -52,7 +47,7 @@ class SearchPresenter : SearchContract.Presenter {
                 val city = htmlParser.getCity(result.responseBody.toString())
 
                 withContext(Dispatchers.Main) {
-                    view.fulfillSpinner(ArrayList(city.city!!.values), searchCity)
+                    getView()?.fulfillSpinner(ArrayList(city.city!!.values), searchCity)
                 }
                 } catch (e: Exception) {
                     Logger.getLogger(SplashScreenActivity::class.java.name).warning("Exception in getCity in SearchFragment")
