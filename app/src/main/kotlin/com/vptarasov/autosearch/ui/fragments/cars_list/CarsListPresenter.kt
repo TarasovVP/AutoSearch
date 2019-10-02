@@ -13,9 +13,6 @@ import java.util.logging.Logger
 
 class CarsListPresenter : BasePresenter<CarsListContract.View>(), CarsListContract.Presenter{
 
-    private lateinit var cars: ArrayList<Car>
-    private var lastPage: Int = 1
-
     @SuppressLint("CheckResult")
     override fun loadCars(queryDetails: QueryDetails?, page: Int) {
         val viewModelJob = Job()
@@ -50,11 +47,11 @@ class CarsListPresenter : BasePresenter<CarsListContract.View>(), CarsListContra
                         page.toString()
                     )
                     val htmlParser = HTMLParser()
-                    cars = htmlParser.getCarList(result.responseBody.toString())
-                    lastPage = htmlParser.getLastPage(result.responseBody.toString())
+                    val cars = htmlParser.getCarList(result.responseBody.toString())
+                    val lastPage = htmlParser.getLastPage(result.responseBody.toString())
                     getView()?.getLastPage(lastPage)
                     if (cars.size > 0) {
-                        loadFavouriteCars()
+                        loadFavouriteCars(cars, lastPage)
                     } else {
                         withContext(Dispatchers.Main) {
                             if (App.instance?.isNetworkAvailable()!!) {
@@ -74,7 +71,7 @@ class CarsListPresenter : BasePresenter<CarsListContract.View>(), CarsListContra
         }
     }
 
-    override fun loadFavouriteCars() {
+    override fun loadFavouriteCars(cars: ArrayList<Car>, lastPage: Int) {
 
         App.instance?.firebaseFirestore?.collection("user")
             ?.document(App.instance!!.user.id)?.collection(("cars"))

@@ -7,7 +7,6 @@ import com.vptarasov.autosearch.ui.fragments.BasePresenter
 class FavouritePresenter : BasePresenter<FavouriteContract.View>(), FavouriteContract.Presenter {
 
      override fun loadFavouriteCars() {
-        getView()?.showProgress()
 
         App.instance?.firebaseFirestore?.collection("user")
             ?.document(App.instance!!.user.id)?.collection(("cars"))

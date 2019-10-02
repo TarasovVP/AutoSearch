@@ -14,14 +14,12 @@ class CarsListContract {
         fun onItemClick(car: Car)
         fun onFavoriteClick(car: Car)
         fun getLastPage(lastPage: Int)
-        fun showProgress()
         fun hideProgress()
-        fun showErrorMessage(error: String)
         fun showNothingFoundText()
     }
 
     interface Presenter : AppContract.Presenter<View>{
         fun loadCars(queryDetails: QueryDetails?, page: Int)
-        fun loadFavouriteCars()
+        fun loadFavouriteCars(cars: ArrayList<Car>, lastPage: Int)
     }
 }

@@ -1,7 +1,6 @@
 package com.vptarasov.autosearch.ui.fragments.favourite
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,8 +20,8 @@ import kotlinx.android.synthetic.main.fragment_favourite_list.view.*
 import javax.inject.Inject
 
 
-class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(), FavouriteContract.View {
-
+class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(),
+    FavouriteContract.View {
 
     private var adapter: FavouriteAdapter? = null
     private var recyclerView: RecyclerView? = null
@@ -32,23 +31,16 @@ class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(
     @Inject
     lateinit var presenter: FavouriteContract.Presenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        injectDependency()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_favourite_list, container, false)
-        recyclerView = view.recyclerViewFavourite
-        noFoundText = view.noFoundText
-        progressBar = view.progressBarFavourite
+        presenter.loadFavouriteCars()
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        presenter.attach(this)
-        presenter.loadFavouriteCars()
+    override fun initView(view: View) {
+        recyclerView = view.recyclerViewFavourite
+        noFoundText = view.noFoundText
+        progressBar = view.progressBarFavourite
     }
 
     @SuppressLint("SetTextI18n")
@@ -58,7 +50,8 @@ class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(
         } else {
             adapter = FavouriteAdapter(cars)
             adapter?.setListener(this)
-            recyclerView?.layoutManager = LinearLayoutManager(context)
+            recyclerView?.layoutManager =
+                LinearLayoutManager(context)
             recyclerView?.adapter = adapter
         }
     }
@@ -78,7 +71,7 @@ class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(
 
     }
 
-    override fun notifyAdapter(car: Car){
+    override fun notifyAdapter(car: Car) {
         val carsFromAdapter = adapter!!.cars
         for (i in carsFromAdapter.indices) {
             if (carsFromAdapter[i] == car) {
@@ -89,6 +82,7 @@ class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(
             }
         }
     }
+
 
     override fun onLastFavoriteRemoved() {
         noFoundText?.visibility = View.VISIBLE
@@ -102,16 +96,13 @@ class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(
         progressBar?.visibility = View.GONE
     }
 
-    override fun getContext(): Context? {
-        return super.getContext()
-    }
-
     override fun injectDependency() {
         val fragmentComponent = DaggerFragmentComponent.builder()
             .fragmentModule(FragmentModule())
             .build()
 
         fragmentComponent.inject(this)
+        presenter.attach(this)
     }
 
 }

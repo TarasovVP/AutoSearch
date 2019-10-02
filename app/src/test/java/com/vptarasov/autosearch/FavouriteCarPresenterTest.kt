@@ -20,7 +20,7 @@ class FavouriteCarPresenterTest {
     @Test
     fun loadFavouriteCars() {
         favouritePresenter.loadFavouriteCars()
-        Mockito.verify(view).showProgress()
+        Mockito.verify(view).hideProgress()
 
     }
 

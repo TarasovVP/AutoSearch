@@ -59,22 +59,12 @@ class CarFragment : BaseCarFragment<CarFragment, CarFragment>(), CarContract.Vie
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_car, container, false)
-        initView(view)
-        return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         val args = arguments
         if (args != null) {
             val urlCar = args.getString("carUrl")
             presenter.loadCar(urlCar)
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        presenter.attach(this)
+        return view
     }
 
     override fun initView(view: View) {
@@ -154,12 +144,8 @@ class CarFragment : BaseCarFragment<CarFragment, CarFragment>(), CarContract.Vie
         viewPager?.adapter = PhotoAdapter(childFragmentManager, photoList)
     }
 
-    override fun injectDependency() {
-        val fragmentComponent = DaggerFragmentComponent.builder()
-            .fragmentModule(FragmentModule())
-            .build()
+    override fun showProgress() {
 
-        fragmentComponent.inject(this)
     }
 
     private fun updateFavIcon(car: Car) {
@@ -175,8 +161,6 @@ class CarFragment : BaseCarFragment<CarFragment, CarFragment>(), CarContract.Vie
         }
         updateFavIcon(car)
         addDeleCarWithFirebase(car)
-
-
     }
 
     override fun showphotoFullSizeFragment(car: Car){
@@ -194,5 +178,15 @@ class CarFragment : BaseCarFragment<CarFragment, CarFragment>(), CarContract.Vie
             true
         )
     }
+
+    override fun injectDependency() {
+        val fragmentComponent = DaggerFragmentComponent.builder()
+            .fragmentModule(FragmentModule())
+            .build()
+
+        fragmentComponent.inject(this)
+        presenter.attach(this)
+    }
+
 
 }

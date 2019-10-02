@@ -9,12 +9,9 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.tapadoo.alerter.Alerter
 import com.vptarasov.autosearch.App
 import com.vptarasov.autosearch.R
 import com.vptarasov.autosearch.di.component.DaggerFragmentComponent
@@ -29,7 +26,8 @@ import kotlinx.android.synthetic.main.list_pages.view.*
 import java.util.*
 import javax.inject.Inject
 
-class CarsListFragment : BaseCarFragment<CarsListFragment, CarsListFragment>(), CarsListContract.View {
+class CarsListFragment : BaseCarFragment<CarsListFragment, CarsListFragment>(),
+    CarsListContract.View {
 
     private var adapter: CarsListAdapter? = null
     private var page: Int = 1
@@ -48,25 +46,9 @@ class CarsListFragment : BaseCarFragment<CarsListFragment, CarsListFragment>(), 
     @Inject
     lateinit var presenter: CarsListContract.Presenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-        injectDependency()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_cars_list, container, false)
-        initView(view)
-        showProgress()
-        return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        retainInstance = true
         val args = arguments
         if (cars == null) {
             if (args?.getSerializable("queryDetails") != null) {
@@ -80,11 +62,7 @@ class CarsListFragment : BaseCarFragment<CarsListFragment, CarsListFragment>(), 
         } else {
             initAdapter(cars!!, lastPage)
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        presenter.attach(this)
+        return view
     }
 
     override fun getLastPage(lastPage: Int) {
@@ -162,23 +140,13 @@ class CarsListFragment : BaseCarFragment<CarsListFragment, CarsListFragment>(), 
     override fun onFavoriteClick(car: Car) {
 
         addDeleCarWithFirebase(car)
-        if (car.isBookmarked()){
+        if (car.isBookmarked()) {
             car.setBookmarked(false)
-        }else{
+        } else {
             car.setBookmarked(true)
         }
         adapter?.updateFavIcon(car)
 
-    }
-
-    override fun showErrorMessage(error: String) {
-        Alerter.create(Objects.requireNonNull<FragmentActivity>(activity))
-            .setIconColorFilter(ContextCompat.getColor(activity!!, android.R.color.white))
-            .setBackgroundColorRes(R.color.colorError)
-            .setIcon(R.drawable.ic_close_circle)
-            .setTitle(R.string.error)
-            .setText(error)
-            .show()
     }
 
 
@@ -201,5 +169,6 @@ class CarsListFragment : BaseCarFragment<CarsListFragment, CarsListFragment>(), 
             .build()
 
         fragmentComponent.inject(this)
+        presenter.attach(this)
     }
 }
