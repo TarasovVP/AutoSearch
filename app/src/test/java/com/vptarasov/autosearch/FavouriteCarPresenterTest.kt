@@ -1,6 +1,7 @@
 package com.vptarasov.autosearch
 
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.times
 import com.vptarasov.autosearch.ui.fragments.favourite.FavouriteContract
 import com.vptarasov.autosearch.ui.fragments.favourite.FavouritePresenter
 import org.junit.Before
@@ -20,7 +21,7 @@ class FavouriteCarPresenterTest {
     @Test
     fun loadFavouriteCars() {
         favouritePresenter.loadFavouriteCars()
-        Mockito.verify(view).hideProgress()
+        Mockito.verify(view, times(0)).hideProgress()
 
     }
 
