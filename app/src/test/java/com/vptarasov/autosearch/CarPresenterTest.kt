@@ -46,7 +46,7 @@ class CarPresenterTest {
             Mockito.verify(view, times(0)).onFavoriteClick(car = Car())
 
             delay(10000)
-            //Mockito.verify(view, times(1)).setDataToViews(car= Car())
+            //Mockito.verify(View, times(1)).setDataToViews(car= Car())
 
             Assert.assertEquals("AssertCarName", "ГАЗ 21 Волга Люкс", carPresenter.name)
         }

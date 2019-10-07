@@ -23,6 +23,7 @@ import javax.inject.Inject
 class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(),
     FavouriteContract.View {
 
+
     private var adapter: FavouriteAdapter? = null
     private var recyclerView: RecyclerView? = null
     private var noFoundText: TextView? = null
@@ -33,7 +34,6 @@ class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_favourite_list, container, false)
-        presenter.loadFavouriteCars()
         return view
     }
 
@@ -41,6 +41,8 @@ class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(
         recyclerView = view.recyclerViewFavourite
         noFoundText = view.noFoundText
         progressBar = view.progressBarFavourite
+        val cars = presenter.getFavouriteCars()
+        initAdapter(cars)
     }
 
     @SuppressLint("SetTextI18n")
@@ -103,6 +105,7 @@ class FavouriteFragment : BaseCarFragment<FavouriteFragment, FavouriteFragment>(
 
         fragmentComponent.inject(this)
         presenter.attach(this)
+        presenter.loadFavouriteCars()
     }
 
 }

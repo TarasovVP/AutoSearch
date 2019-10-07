@@ -16,5 +16,6 @@ class FavouriteContract {
 
     interface Presenter : AppContract.Presenter<View>{
         fun loadFavouriteCars()
+        fun getFavouriteCars(): ArrayList<Car>
     }
 }
